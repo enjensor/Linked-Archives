@@ -38,6 +38,7 @@
 //	28 June 2017
 //	5 February 2018
 //	6-9 August 2018
+// 	18 October 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get	
@@ -63,14 +64,16 @@
 ///////////////////////////////////////////////////////////// Start Table
 	
 ?>
-	<table id="dt-basic" class="table table-striped table-hover" cellspacing="0" width="99%" style="table-layout:fixed; width: 99% !important;">
+	Please click on a manuscript title below to display items in the selected collection.
+	<table id="dt-basic" class="table table-striped table-hover" cellspacing="0" width="99%" style="table-layout: fixed; 
+		width: 99% !important; margin-top: 0px; padding-top: 0px;">
   		<thead>
       		<tr>
-        		<th style="width:40%; border-bottom: 8px solid #1b746c; text-align:left; font-size: 0.8em;">Box</th>
-               	<th class="mediaTable" style="width:15%; border-bottom: 8px solid #1b746c; text-align:right; font-size: 0.8em;">M.</th>
-               	<th class="mediaTable" style="width:15%; border-bottom: 8px solid #1b746c; text-align:right; font-size: 0.8em;">V.</th>
-              	<th class="mediaTable mediaTableB" style="width:15%; border-bottom: 8px solid #1b746c; text-align:right; font-size: 0.8em;">N.</th>
-               	<th style="width:15%; border-bottom: 8px solid #1b746c; text-align:right; font-size: 0.8em;">Yr.</th>
+        		<th style="width:85%; border-bottom: 8px solid #1b746c; text-align:left; font-size: 0.01em; padding-left: 8px;">&nbsp;</th>
+               	<!-- <th class="mediaTable" style="width:15%; border-bottom: 8px solid #1b746c; text-align:right; font-size: 0.8em;">M.</th> //-->
+               	<!-- <th class="mediaTable" style="width:15%; border-bottom: 8px solid #1b746c; text-align:right; font-size: 0.8em;">V.</th> //-->
+              	<!-- <th class="mediaTable mediaTableB" style="width:15%; border-bottom: 8px solid #1b746c; text-align:right; font-size: 0.8em;">N.</th> //-->
+               	<!-- <th style="width:15%; border-bottom: 8px solid #1b746c; text-align:right; font-size: 0.8em;">Yr.</th> //-->
         	</tr>
        	</thead>
     	<tbody>
@@ -79,9 +82,9 @@
 ///////////////////////////////////////////////////////////// List Collections Query
 
 	$queryD = "SELECT * FROM collections ";
-	$queryD .= "WHERE skos_orderedCollection ";
-	$queryD .= "LIKE \"%MS%\" ";
-	$queryD .= "ORDER BY dc_relation ASC";		
+//	$queryD .= "WHERE skos_orderedCollection ";
+//	$queryD .= "LIKE \"%MS%\" ";
+	$queryD .= "ORDER BY skos_collection ASC";		
 	$mysqli_resultD = mysqli_query($mysqli_link, $queryD);
 	while($rowD = mysqli_fetch_row($mysqli_resultD)) { 
 
@@ -96,22 +99,24 @@
 		$dc_identifier = $rowD[2];
 		$rowD[7] = preg_replace("/ML MSS /i","","$rowD[7]");
 
-/////////////////////////// Get Number of Docs		
-		
-		$queryX = "SELECT COUNT(*) FROM items WHERE collections_dc_identifier = \"$dc_identifier\" ";
-		$mysqli_resultX = mysqli_query($mysqli_link, $queryX);
-		while($rowX = mysqli_fetch_row($mysqli_resultX)) { 
-			$docs = $rowX[0];
-		}
-	
+/////////////////////////// Get Number of Docs - OCT 2018 Commenting Out
+//		
+//		$queryX = "SELECT COUNT(*) FROM items WHERE collections_dc_identifier = \"$dc_identifier\" ";
+//		$mysqli_resultX = mysqli_query($mysqli_link, $queryX);
+//		while($rowX = mysqli_fetch_row($mysqli_resultX)) { 
+//			$docs = $rowX[0];
+//		}
+//	
 /////////////////////////// Archive Suffix Modifier START		
 		
 		if(preg_match("/MS/i","$rowD[7]")) {
 			$rowD[7] = preg_replace("/MS /i","","$rowD[7]");
-			$rowD[6] = "<span style=\"font-weight: 400; font-size: 0.9em;\">W & T / $docs_acronym</span><br /><span style=\"color: #9C2929;\">".$rowD[6]."</span>";
+			$rowHeader = "<span style=\"font-weight: 400; font-size: 0.9em; color: #888888; \">W & T / $docs_acronym</span><br />";
+			$rowD[6] = "<span style=\"color: #9C2929;\">".$rowD[6]."</span>";
 			$tempAcr = "W & T / ";
 		} else {
-			$rowD[6] = "<span style=\"font-weight: 400; font-size: 0.9em;\">A & R / $docs_acronym</span><br /><span style=\"color: #9C2929;\">".$rowD[6]."</span>";
+			$rowHeader = "<span style=\"font-weight: 400; font-size: 0.9em; color: #888888; \">A & R / $docs_acronym</span><br />";
+			$rowD[6] = "<span style=\"color: #9C2929;\">".$rowD[6]."</span>";
 			$tempAcr = "A & R / ";
 		}
 		
@@ -170,6 +175,7 @@
 		echo "<tr>";
 		echo "<td width=\"100%\" style=\"border-bottom: 0px solid #768697; border-left: 0px solid #768697; ";
 		echo "text-align:left; color:#000080; font-size: 0.9em; word-break: break-word; \">";
+		echo "$rowHeader";
 		echo "<a ";
 		echo "data-toggle=\"tooltip\" title=\"".$tooltip."\" ";
 		echo "href=\"javascript: ";
@@ -181,21 +187,43 @@
         echo "$('#tableResultsContainer').fadeIn('slow'); ";
         echo "}); ";
         echo "}); ";
-		echo "\" style=\"text-decoration:none;\" target=\"_self\">";
+		echo "\" style=\"font-weight: 700; text-decoration:none; text-align: justify; \" target=\"_self\">";
 		echo "$rowD[6]";
 		echo "</a>";
+		echo "<br />";
+		echo "<span style=\"font-weight: 400; font-size: 1.0em; color: #111111; \">";
+		if(($rowD[3] != "")) {
+			echo "$rowD[3]";
+		}
+		if(($rowD[5] != "")) {
+			echo ", $rowD[5]";
+		}
+		echo "<br />MSS $rowD[7]/$rowD[8]<br />";
+		if(($rowD[9] == $rowD[10])){
+			echo "<strong>$rowD[9]</strong>";
+		} else {
+			echo "<strong>$rowD[9]-$rowD[10]</strong>";
+		}
+		echo "</span></td>";
 		
 /////////////////////////// Manuscript Location Details		
 		
 		echo "</td>";
-		echo "<td nowrap class=\"mediaTable\" style=\"border-bottom: 0px solid #768697; ";
-		echo "text-align:right; font-size: 0.8em;\">$rowD[7]</td>";
-		echo "<td nowrap class=\"mediaTable\" style=\"border-bottom: 0px solid #768697; ";
-		echo "text-align:right; font-size: 0.8em;\">$rowD[8]</td>";
-		echo "<td nowrap class=\"mediaTable mediaTableB\" style=\"border-bottom: 0px solid #768697; ";
-		echo "text-align:right; font-size: 0.8em;\">$docs</td>";
-		echo "<td nowrap style=\"border-bottom: 0px solid #768697; ";
-		echo "text-align:right; font-size: 0.8em; \" nowrap>$rowD[9]<br />-$rowD[10]</td>";
+		
+/////////////////////////// OCT 2018 Commenting Out		
+//		
+//		echo "<td class=\"mediaTable\" style=\"border-bottom: 0px solid #768697; ";
+//		echo "text-align:right; font-size: 0.8em;\">$rowD[7]</td>";
+//		echo "<td nowrap class=\"mediaTable\" style=\"border-bottom: 0px solid #768697; ";
+//		echo "text-align:right; font-size: 0.8em;\">$rowD[8]</td>";
+//		echo "<td nowrap class=\"mediaTable mediaTableB\" style=\"border-bottom: 0px solid #768697; ";
+//		echo "text-align:right; font-size: 0.8em;\">$docs</td>";
+//		echo "<td nowrap style=\"border-bottom: 0px solid #768697; ";
+//		echo "text-align:right; font-size: 0.8em; \" nowrap>$rowD[9]<br />-$rowD[10]</td>";
+//
+//
+/////////////////////////// OCT 2018 Commenting Out
+		
 		echo "</tr>";
 		
 	}

@@ -27,6 +27,7 @@
 //
 //  VERSION 0.1
 //	30 May 2017
+//	18 October 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get	
@@ -76,6 +77,7 @@
 
 	$xml = "";
 	$p = 0;
+	$go = 0;
 	foreach($IDs as $dc_identifier) {
 		$queryD = "SELECT * FROM items WHERE dc_identifier = \"$dc_identifier\" ";
 		$mysqli_resultD = mysqli_query($mysqli_link, $queryD);
@@ -124,11 +126,22 @@
 						$columns[] = $rowH[0];
 						$item_level .= "\"$rowH[1]:$rowH[0]\",";
 					}
+					$item_level .= "\"gn:name-dc:coverage.y\",";
+					$item_level .= "\"gn:name-dc:coverage.x\",";
+					$item_level .= "\"mads:associatedLocale-dc:coverage.y\",";
+					$item_level .= "\"mads:associatedLocale-dc:coverage.x\",";
 					$item_level .= "\"iana:UUID\"";
 					$item_level .= "\n";
 					$p++;
 				}
 
+////////////////////////////////// GeoRefs
+				
+				$gn_dc_coverage_y = "";
+				$gn_dc_coverage_x = "";
+				$mads_dc_coverage_y = "";
+				$mads_dc_coverage_x = "";
+				
 ////////////////////////////////// Field Values
 				
 				$item_level .= "\"$phpBase\",";
@@ -143,10 +156,13 @@
 				$item_level .= "\"$this_marc_addressee\",";
 				$item_level .= "\"$this_rdaa_groupMemberOf\",";
 				$item_level .= "\"$this_mads_associatedLocale\",";
+				
 				if(count($columns > 0)) {
 					foreach($columns as $C) {
 						$temp = "";
-						$queryH = "SELECT value_string FROM annotations WHERE dc_references = \"$this_dc_identifier\" AND rdfs_label = \"$C\" ORDER BY value_string ASC";
+						$queryH = "SELECT value_string FROM annotations ";
+						$queryH .= "WHERE dc_references = \"$this_dc_identifier\" ";
+						$queryH .= "AND rdfs_label = \"$C\" ORDER BY value_string ASC";
 						$mysqli_resultH = mysqli_query($mysqli_link, $queryH);
 						while($rowH = mysqli_fetch_row($mysqli_resultH)) {
 							$temp .= "$rowH[0]; ";
@@ -155,6 +171,29 @@
 						$item_level .= "\"$temp\",";
 					}
 				}
+				
+				if(($this_gn_name != "") && ($this_gn_name != " ")) {
+					$queryH = "SELECT latitude, longitude FROM datasource_cities WHERE combined = \"$this_gn_name\" LIMIT 1";
+					$mysqli_resultH = mysqli_query($mysqli_link, $queryH);
+					while($rowH = mysqli_fetch_row($mysqli_resultH)) {
+						$gn_dc_coverage_y = $rowH[0];
+						$gn_dc_coverage_x = $rowH[1];
+					}
+				}
+				
+				if(($this_mads_associatedLocale != "") && ($this_mads_associatedLocale != " ")) {
+					$queryH = "SELECT latitude, longitude FROM datasource_cities WHERE combined = \"$this_mads_associatedLocale\" LIMIT 1";
+					$mysqli_resultH = mysqli_query($mysqli_link, $queryH);
+					while($rowH = mysqli_fetch_row($mysqli_resultH)) {
+						$mads_dc_coverage_y = $rowH[0];
+						$mads_dc_coverage_x = $rowH[1];
+					}
+				}
+				
+				$item_level .= "\"$gn_dc_coverage_y\",";
+				$item_level .= "\"$gn_dc_coverage_x\",";
+				$item_level .= "\"$mads_dc_coverage_y\",";
+				$item_level .= "\"$mads_dc_coverage_x\",";
 				$item_level .= "\"$this_dc_UUID\"";
 				$item_level .= "\n";
 			}		
