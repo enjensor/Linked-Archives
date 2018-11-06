@@ -38,6 +38,7 @@
 //	25 May 2017
 //	8 August 2018
 //	20 August 2018
+//  6-7 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get	
@@ -164,7 +165,7 @@
 		$queryD = "SELECT * FROM annotations WHERE dc_references = \"$dc_identifier\" ";
 		$mysqli_resultD = mysqli_query($mysqli_link, $queryD);
 		while($rowD = mysqli_fetch_row($mysqli_resultD)) { 
-			$itemTags[] = $rowD[7]."|".$rowD[5]."|".$rowD[6]."|".$rowD[1]."|".$rowD[0];
+			$itemTags[] = $rowD[7]."|".$rowD[5]."|".$rowD[6]."|".$rowD[1]."|".$rowD[0]."|".$rowD[9];
 		}
 		sort($itemTags);
 		$itemFields["dc_title"] = preg_replace("/\:/i","_",$itemFields["dc_title"]);
@@ -195,16 +196,34 @@
 ///////////////////////////////////////////////////////////// List Existing tags	
 	
 ?>
-	<table class="table table-striped table-condensed table-hover" width="99%">
+	<table class="table table-condensed" width="99%" style="border: 2px solid #dddddd;">
 		<tbody>
         <?php
 								
 			foreach($itemTags as $iTz) {
 				$bitz = explode("|","$iTz");
-				echo "<tr id=\"row_".$bitz[3]."\">";
-				echo "<td style=\"padding:18px;font-size:0.9em;word-wrap:normal;word-wrap:break-word;display:inline-block;\" width=\"";
+				echo "<tr id=\"row_".$bitz[3]." ";
+                if(($bitz[5] == "OCR")) {
+                    echo "style=\"background-color: #ecedeb; \" ";
+                } else {
+                    echo "style=\"background-color: #FFFFFF; \" ";
+                }
+				echo "\">\n";
+				echo "<td style=\"";
+				echo "padding:9px; ";
+				echo "font-size:0.9em; ";
+				echo "word-wrap:normal; ";
+				echo "word-wrap:break-word; ";
+				echo "display:inline-block; ";
+                if(($bitz[5] == "OCR")) {
+                    echo "background-color: #ecedeb; ";
+                } else {
+                    echo "background-color: #FFFFFF; ";
+                }
+				echo "\" ";
+				echo "width=\"";
 				if(($itemFields["dct_accessRights"] != "restricted")) {
-					echo "47%";
+					echo "33%";
 				} else {
 					echo "50%";	
 				}
@@ -212,19 +231,32 @@
 				echo $bitz[1];
 				echo " : ";
 				echo $bitz[2];
-				echo "</td>";
-				echo "<td style=\"padding:15px; font-size: 0.9em; word-wrap: normal;word-wrap:break-word; display:inline-block;\" width=\"";
+				echo "</td>\n";
+				echo "<td style=\"";
+				echo "padding:9px; ";
+				echo "font-size: 0.9em; ";
+				echo "word-wrap: normal; ";
+				echo "word-wrap:break-word; ";
+				echo "display:inline-block; ";
+				echo "\" ";
+				echo "width=\"";
 				if(($itemFields["dct_accessRights"] != "restricted")) {
-					echo "47%";
+					echo "34%";
 				} else {
 					echo "50%";	
 				}
 				echo "\">";
 				echo $bitz[0];
-				echo "</td>";
+				echo "</td>\n";
 				if(($itemFields["dct_accessRights"] != "restricted")) {
 					$q++;
-					echo "<td style=\"padding:15px;font-size:0.9em; text-align: right;\" width=\"6%\" nowrap>";
+					echo "<td style=\"";
+					echo "padding:9px; ";
+					echo "font-size:0.9em; ";
+					echo "text-align: right; ";
+                    				echo "display:inline-block; ";
+                    echo "width: 33%; ";
+					echo "\" width=\"33%\" nowrap>";
 
 //////////////////////////////// Delete Mention					
 					
@@ -290,10 +322,10 @@
 
 //////////////////////////////// Close Links					
 					
-					echo "<br />&nbsp;";
-					echo "</td>";
+//					echo "<br />&nbsp;";
+					echo "</td>\n";
 				}
-				echo "</tr>";
+				echo "</tr>\n\n";
 			}
 								
         ?>
@@ -312,8 +344,8 @@
 ///////////////////////////////////// Start Previous Item Mentions Table                       
                                         
 		echo "<tr>";
-		echo "<td style=\"border-right: 1px solid #ffffff; color: #FFFFFF; background-color: #888888; padding: 11px; ";
-		echo "font-size: 0.9em; font-weight: 900;text-align:right;\" width=\"23%\" nowrap>Key or Label</td>";
+		echo "<td style=\"border-right: 1px solid #ffffff; color: #FFFFFF; background-color: #888888; padding: 9px; ";
+		echo "font-size: 0.9em; font-weight: 900;text-align:right;\" width=\"23%\" nowrap>Key</td>";
 		echo "<td style=\"color: #FFFFFF; background-color: #888888; padding: 9px; ";
 		echo "font-size: 0.9em; font-weight: 900;\" width=\"100%\">Value</td>";
 		echo "</tr>";

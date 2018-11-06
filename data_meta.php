@@ -45,6 +45,8 @@
 //	30 June 2017
 //	7 July 2017
 //	10-13 August 2018
+//  29 October 2018
+//  6-7 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Set reload var	
@@ -95,8 +97,15 @@
 	$mentions_dc_identifier = $_GET["mentions_dc_identifier"];
 	$mentions_prior_dc_identifier = $_GET["mentions_prior_dc_identifier"];
 	$contributor = "contrib41T71U4BZZ";
+    $autotag = $_GET["autotag"];
 	$_GET = array();
 	$_POST = array();
+
+///////////////////////////////////////////////////////////// Autotagging
+
+    if(($autotag == "yes") && ($data_dc_identifier != "")) {
+        include("./data_meta_autotag.php");
+    }
 	
 ///////////////////////////////////////////////////////////// OCR Status
 
@@ -608,7 +617,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -646,7 +655,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -684,7 +693,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -722,7 +731,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -760,7 +769,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -795,7 +804,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-primary\">";
+							echo "<button class=\"btn btn-primary btn-selected-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newthisPage</span>";
 							echo "</button>";
 							echo "</a>";
@@ -828,7 +837,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-primary\">";
+							echo "<button class=\"btn btn-primary btn-selected-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newthisPage</span>";
 							echo "</button>";
 							echo "</a>";
@@ -865,7 +874,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -902,7 +911,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -939,7 +948,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -976,7 +985,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -1013,7 +1022,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -1050,7 +1059,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -1087,7 +1096,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -1124,7 +1133,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -1161,7 +1170,7 @@
 							echo "}); ";
 							echo "}); ";
 							echo "\">";
-							echo "<button class=\"btn btn-warning\">";
+							echo "<button class=\"btn btn-warning btn-navigation\">";
 							echo "<span style='font-size:0.89em;'>$newPage</span>";
 							echo "</button>"; 
 							echo "</a>";
@@ -1177,7 +1186,9 @@
 
 //////////////////////////////////////////////////////////////////////////////////////// OCR
 
-			$tPixels = ((substr_count($itemFields["dc_description"], "\n" ) + 8) * 15);
+            $aPixels = substr_count($itemFields["dc_description"], "\n" );
+            if(($_SESSION["administrator"] == "yes") or ($aPixels > 0)) {
+                $tPixels = ((substr_count($itemFields["dc_description"], "\n" ) + 8) * 15);
 
 ?> 
             <div class="panel" style="background-color: #FFFFFF; border: 1px solid #196961;">
@@ -1197,7 +1208,7 @@
 							
 						?>
 					</div>
-					<h4 class="panel-title"><a name="scrollOCR">Text Recognition</a></h4>
+					<h4 class="panel-title"><a name="scrollOCR">Text Recognition <?php echo $aPixels; ?></a></h4>
 				</div> 
                 <div id="ocr-panel-collapse" class="collapse in" style="min-height: <?php echo $tPixels; ?>px;">
     				<div class="panel-body" id="ocrContainer">
@@ -1215,6 +1226,8 @@
 
 //////////////////////////////////////////////////////////////////////////////////////// Item Metadata
 
+            }
+                
 ?>
             <div class="panel" style="background-color: #FFFFFF; border: 1px solid #1B4F74;">
                 <div class="panel-heading">
@@ -1232,19 +1245,18 @@
 									$valid = "no";
 								}
 								if(($valid == "yes")) {
-									echo "<a href=\"#\">";
+									echo "<button class=\"btn btn-default\"><a href=\"#\">";
 									echo "<i id=\"m".$dc_identifier."\" class=\"ion-flag mbtn-toggle\" ";
 									echo "style=\"color:#CCCCCC; font-size: 1.4em;\" ";
 									echo "data-status=\"YES\" data-id=\"".$dc_identifier."\"></i>";
-									echo "</a>";
+									echo "</a></button>";
 								} else {
-									echo "<a href=\"#\">";
+									echo "<button class=\"btn btn-default\"><a href=\"#\">";
 									echo "<i id=\"m".$dc_identifier."\" class=\"ion-flag mbtn-toggle\" ";
 									echo "style=\"color:#8B0D82; font-size: 1.4em;\" ";
 									echo "data-status=\"NO\" data-id=\"".$dc_identifier."\"></i>";
-									echo "</a>";
-								}	
-								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";	
+									echo "</a></button>";
+								}		
 							}
 
 ///////////////////////////////////// Metadata
@@ -1273,7 +1285,7 @@
 										$queryD = "SELECT * FROM annotations WHERE dc_references = \"$dc_identifier\" ";
 										$mysqli_resultD = mysqli_query($mysqli_link, $queryD);
 										while($rowD = mysqli_fetch_row($mysqli_resultD)) { 
-											$itemTags[] = $rowD[7]."|".$rowD[5]."|".$rowD[6]."|".$rowD[1]."|".$rowD[0];
+											$itemTags[] = $rowD[7]."|".$rowD[5]."|".$rowD[6]."|".$rowD[1]."|".$rowD[0]."|".$rowD[9];
 										}
 										sort($itemTags);
 										$itemFields["dc_title"] = preg_replace("/\:/i","_",$itemFields["dc_title"]);
@@ -1655,7 +1667,7 @@
 										echo "<table class=\"table table-condensed\" width=\"99%\" border=\"0\">";
 										echo "<tbody>";	
 										echo "<tr>";
-										echo "<td style=\"border-right: 1px solid #ffffff; color: #FFFFFF; background-color: #888888; padding: 11px; ";
+										echo "<td style=\"border-right: 1px solid #ffffff; color: #FFFFFF; background-color: #888888; padding: 9px; ";
 										echo "font-size: 0.9em; font-weight: 900;text-align:right;\" width=\"23%\" nowrap>Key</td>";
 										echo "<td style=\"color: #FFFFFF; background-color: #888888; padding: 9px; ";
 										echo "font-size: 0.9em; font-weight: 900;\" width=\"100%\">Value</td>";
@@ -1741,7 +1753,7 @@
 ///////////////////////////////////// Start Previous Item-Level MetaData Table                       
                                         
                                         echo "<tr>";
-                                        echo "<td style=\"border-right: 1px solid #ffffff; color: #FFFFFF; background-color: #888888; padding: 11px; ";
+                                        echo "<td style=\"border-right: 1px solid #ffffff; color: #FFFFFF; background-color: #888888; padding: 9px; ";
                                         echo "font-size: 0.9em; font-weight: 900;text-align:right;\" width=\"23%\" nowrap>Key</td>";
                                         echo "<td style=\"color: #FFFFFF; background-color: #888888; padding: 9px; ";
                                         echo "font-size: 0.9em; font-weight: 900;\" width=\"100%\">Value</td>";
@@ -2070,7 +2082,7 @@
 		while($rowD = mysqli_fetch_row($mysqli_resultD)) { 
 			echo "<div class=\"btn-group\" role=\"group\" style=\"padding-right:1px;\">";
 			echo "<a href=\"$rowD[2]\" target=\"_RDF\" style=\"color: #FFFFFF;\">";
-			echo "<button class=\"btn btn-primary\" style=\"margin-right: 1px; margin-bottom: 1px; font-size: 0.8em;\">";
+			echo "<button class=\"btn btn-primary btn-selected-navigation\" style=\"margin-right: 1px; margin-bottom: 1px; font-size: 0.8em;\">";
 			echo "<strong>";
 			echo strtoupper($rowD[1]);
 			echo "</strong>";

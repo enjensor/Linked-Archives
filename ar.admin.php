@@ -29,6 +29,9 @@
 //  21 February 2017
 //	4-5 June 2017
 //	6-7 July 2017
+//	19 October 2018
+//  29 October 2018
+//  6 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get
@@ -49,7 +52,7 @@
 	$_GET = array();
 	$_POST = array();
 	$contributor = "contrib41T71U4BZZ";
-	$msg = "START<br />";
+	$msg = "";
 	$doPrior = "n";
 	
 /////////////////////////////////////////////////////////// Do Google	
@@ -57,14 +60,190 @@
 	$truncateBooks = "never";
 	$doBooks = "not now";
 	$doImages = "not now";
-	
-/////////////////////////////////////////////////////////// Do OCR import
-
+	$doGeoNames = "not now";
 	$doOCR = "not now";
-
-/////////////////////////////////////////////////////////// Do Acronyms
-
 	$doAcronyms = "not now";
+    $doDuplicates = "not now";
+    $doAutoTags = "y";
+    
+/////////////////////////////////////////////////////////// Do Automatic Tag Matching
+
+    if(($doAutoTags == "y")){
+        $r = 0;
+        echo $msg."Automatic Tag Matching<br />";
+        $tags = array();
+        $descriptions = array();
+        $matches = array();
+        $queryD = "SELECT DISTINCT(value_string), reg_uri, rdfs_label ";
+        $queryD .= "FROM annotations ";
+        $queryD .= "GROUP BY value_string, reg_uri, rdfs_label ";
+        $queryD .= "ORDER BY value_string, reg_uri, rdfs_label";
+        $mysqli_resultD = mysqli_query($mysqli_link, $queryD);
+        while($rowD = mysqli_fetch_row($mysqli_resultD)) {
+            $tags[] = "$rowD[0]|$rowD[1]|$rowD[2]";
+        }
+        $queryD = "SELECT items.dc_description, items.dc_identifier ";
+        $queryD .= "FROM items ";
+        $queryD .= "WHERE items.dc_description != \"\" ";
+        $queryD .= "AND items.dc_description IS NOT NULL ";
+        $queryD .= "AND CHAR_LENGTH(items.dc_description) > 25 ";
+        $queryD .= "ORDER BY items.dc_description ASC; ";
+        $mysqli_resultD = mysqli_query($mysqli_link, $queryD);
+        while($rowD = mysqli_fetch_row($mysqli_resultD)) {
+            $descriptions[] = "$rowD[0]*[|]*$rowD[1]";
+        }
+        $a = 0;
+        $b = 0;
+        foreach($tags as $t) {
+            $a++;
+            $words = explode("|","$t");
+            foreach($descriptions as $d) {
+                $records = explode("*[|]*","$d");
+                if(preg_match("/$words[0]/i","$records[0]")) {
+                    $found = "n";
+                    $queryD = "SELECT * ";
+                    $queryD .= "FROM annotations ";
+                    $queryD .= "WHERE items_dc_identifier = \"$records[1]\" ";
+                    $queryD .= "AND value_string = \"$words[0]\" ";
+                    $queryD .= "AND reg_uri = \"$words[1]\" ";
+                    $queryD .= "AND rdfs_label = \"$words[2]\" ";
+                    $queryD .= "LIMIT 1";  
+                    $mysqli_resultD = mysqli_query($mysqli_link, $queryD);
+                    while($rowD = mysqli_fetch_row($mysqli_resultD)) {
+                        $found = "y";
+                        $b++;
+                    }
+                    if(($found == "n")) {
+                        $matches[] = $t;
+                        $r++;
+                        $iana_UUID = guidv4();	
+                        $characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                        $iana = "";
+                        for ($i = 0; $i < 12; $i++) {
+                            $iana .= $characters[mt_rand(0, 36)];
+                        }
+                        $iana = time().$iana;
+                        $queryE = "INSERT INTO annotations VALUES (";
+                        $queryE .= "\"0\", ";
+                        $queryE .= "\"$iana_UUID\", ";
+                        $queryE .= "\"".time()."_".$iana."\", ";
+                        $queryE .= "\"$records[1]\", ";
+                        $queryE .= "\"$records[1]\", ";
+                        $queryE .= "\"$words[1]\", ";
+                        $queryE .= "\"$words[2]\", ";
+                        $queryE .= "\"$words[0]\", ";
+                        $queryE .= "\"\", ";
+                        $queryE .= "\"OCR\", ";
+                        $queryE .= "\"$contributor\", ";
+                        $queryE .= "NOW() ";
+                        $queryE .= "); ";
+                        $mysqli_resultE = mysqli_query($mysqli_link, $queryE);
+                    }
+                }
+            }
+        }
+        $matches = array_unique($matches);
+        echo count($tags)." unique tags<br />";
+        echo count($descriptions)." OCR'd documents<br />";
+        echo $b." existing matched tags<br />";
+        echo $r." NEW matches across ".count($matches)." tags<br /><br />";
+        if((count($matches) > 0)) {    
+            foreach($matches as $e) {
+                echo "$e<br />";   
+            }
+        }
+        $queryD = "DELETE FROM annotations ";
+        $queryD .= "WHERE (value_string = \"F.L.\" OR value_string = \"R.W.\") ";
+        $queryD .= "AND resource_uri = \"OCR\";";
+        $mysqli_resultD = mysqli_query($mysqli_link, $queryD);
+        die;
+    }
+
+/////////////////////////////////////////////////////////// Remove Duplicates
+
+    if(($doDuplicates == "y")){
+        $r = 0;
+        echo $msg."Removing Duplicates<br />";
+        $queryD = "SELECT ";
+        $queryD .= "items_dc_identifier, ";
+        $queryD .= "COUNT(items_dc_identifier), ";
+        $queryD .= "reg_uri, ";
+        $queryD .= "COUNT(reg_uri), ";
+        $queryD .= "rdfs_label, ";
+        $queryD .= "COUNT(rdfs_label), ";
+        $queryD .= "value_string, ";
+        $queryD .= "COUNT(value_string), ";
+        $queryD .= "GROUP_CONCAT(DISTINCT ID) ";
+        $queryD .= "FROM annotations ";
+        $queryD .= "GROUP BY ";
+        $queryD .= "items_dc_identifier, ";
+        $queryD .= "reg_uri, ";
+        $queryD .= "rdfs_label, ";
+        $queryD .= "value_string ";
+        $queryD .= "HAVING ";
+        $queryD .= "(COUNT(items_dc_identifier) > 1) AND ";
+        $queryD .= "(COUNT(reg_uri) > 1) AND ";
+        $queryD .= "(COUNT(rdfs_label) > 1) AND ";
+        $queryD .= "(COUNT(value_string) > 1) ";
+        $queryD .= "ORDER BY items_dc_identifier ASC";
+        $mysqli_resultD = mysqli_query($mysqli_link, $queryD);
+        while($rowD = mysqli_fetch_row($mysqli_resultD)) {
+            $IDs = explode(",",$rowD[8]);
+            if(($IDs[1] != "")) {
+                $r++;
+                $queryR = "DELETE FROM annotations WHERE ID = \"".$IDs[1]."\"; ";
+                $mysqli_resultR = mysqli_query($mysqli_link, $queryR);
+            }
+            if(($IDs[2] != "")) {
+                $r++;
+                $queryR = "DELETE FROM annotations WHERE ID = \"".$IDs[1]."\"; ";
+                $mysqli_resultR = mysqli_query($mysqli_link, $queryR);
+            }
+        }
+        echo "$r Records removed";
+        die;
+    }
+    
+/////////////////////////////////////////////////////////// Geonames
+
+	if(($doGeoNames == "y")){
+		$varCode = "";
+		$varCombined = "";
+		echo $msg."GeoNames Additions<br />";
+		$queryD = "SELECT * FROM geonames ORDER BY ID ASC ";
+		$mysqli_resultD = mysqli_query($mysqli_link, $queryD);
+		while($rowD = mysqli_fetch_row($mysqli_resultD)) {
+			$ID = $rowD[1];
+			$place = $rowD[2];
+			$lat = $rowD[3];
+			$long = $rowD[4];
+			$code = $rowD[5];
+			if(($varCode != $code)) {
+				$varQ = "SELECT Country FROM datasource_country WHERE Alpha2_Code = \"$code\" LIMIT 1";
+				$varQresult = mysqli_query($mysqli_link, $varQ);
+				while($varD = mysqli_fetch_row($varQresult)) {
+					$country = $varD[0];
+					$varCode = $code;
+				}
+			}
+			$combined = $place.", ".$country;
+			$tempCode = strtolower($code);
+			if(($varCombined != $combined)) {
+				$newQ = "INSERT INTO datasource_cities VALUES (";
+				$newQ .= "\"0\",";
+				$newQ .= "\"$tempCode\",";
+				$newQ .= "\"??\",";
+				$newQ .= "\"0\",";
+				$newQ .= "\"$lat\",";
+				$newQ .= "\"$long\",";
+				$newQ .= "\"$combined\")";
+				$newQresult = mysqli_query($mysqli_link, $newQ);
+				$varCombined = $combined;
+				$n++;
+			}
+		}
+		echo "$n Done!";
+	}
 
 /////////////////////////////////////////////////////////// Acronyms
 

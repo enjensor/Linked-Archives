@@ -30,6 +30,7 @@
 //	1-2 May 2017
 //	30 May 2017
 //	8-15 August 2018
+//  24 October 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get
@@ -92,9 +93,9 @@
 		$queryA .= "annotations.reg_uri, ";
 		$queryA .= "annotations.rdfs_label ";
 		$queryA .= "ORDER BY ";
-		$queryA .= "RAND() ";
-//		$queryA .= "TheCount DESC, ";
-//		$queryA .= "annotations.value_string ASC ";
+//		$queryA .= "RAND() ";
+		$queryA .= "TheCount DESC, ";
+		$queryA .= "annotations.value_string ASC ";
 		$queryA .= "LIMIT 14";
 		
 		echo "<tr>";
@@ -164,7 +165,7 @@
 			$queryA .= "annotations.reg_uri, ";
 			$queryA .= "annotations.rdfs_label ";
 			$queryA .= "ORDER BY ";
-//			$queryA .= "TheCount DESC, ";
+			$queryA .= "TheCount DESC, ";
 			$queryA .= "annotations.value_string ASC";
 		} else {
 
@@ -240,11 +241,12 @@
 					$findmeAgain .= " OR ";
 				}
 			}
-			echo "<p style=\"padding: 5px;\">".$headerTags."</p>";
+			echo "<p style=\"padding: 5px;\">".$headerTags."</p>";       
 			$queryA = "SELECT ";
 			$queryA .= "annotations.dc_references, ";
 			$queryA .= "items.dc_identifier, ";
-			$queryA .= "COUNT(annotations.dc_references) AS goal ";
+//			$queryA .= "COUNT(annotations.dc_references) AS goal ";
+            $queryA .= "COUNT(DISTINCT annotations.value_string) AS goal ";
 			$queryA .= "FROM annotations ";
 			$queryA .= "LEFT JOIN items ";
 			$queryA .= "ON annotations.dc_references = items.dc_identifier ";
@@ -281,8 +283,8 @@
 			$queryA .= "annotations.reg_uri, ";
 			$queryA .= "annotations.rdfs_label ";
 			$queryA .= "ORDER BY ";
-//			$queryA .= "TheCount DESC, ";
-			$queryA .= "annotations.value_string ASC";
+			$queryA .= "TheCount DESC, ";
+			$queryA .= "annotations.value_string ASC";           
 
 //////////////////////////////// Finish
 			
@@ -321,7 +323,12 @@
 		echo "font-size: 0.9em; ";
 		echo "\">";	
 		$temp_VS = preg_replace("/\&/","&amp;","$rowA[0]");
-		echo "<a href=\"./data_download_mentions_csv.php?value_string=".$temp_VS."&type=other&format=csv\">";
+		echo "<a href=\"./data_download_mentions_csv.php?";
+		echo "value_phrase=".$searchComplete;
+		echo "&value_string=".$temp_VS;
+		echo "&type=other";
+		echo "&format=csv";
+		echo "\">";
 		echo "<i class=\"ti-download\" style=\"font-weight: 900; color: #1B746C;\"></i>";
 		echo "</a>";
 		echo "</td>";

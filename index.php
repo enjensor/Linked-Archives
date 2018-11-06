@@ -47,6 +47,8 @@
 //	6-7 July 2017
 //	6-13 August 2018
 //	20 August 2018
+//  29 October 2018
+//  6 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Prevent Direct Access of Included Files
@@ -172,7 +174,7 @@
   	VERSION 0.1
     
   	Development Started: 5 January 2017
-	Last updated: 13 August 2018
+	Last updated: 6 November 2018
 
 
 
@@ -201,13 +203,13 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]> 	   <html class="no-js"> <![endif]-->
     <head>   
-    	<title>ARCHIVER: Western Sydney University, Dr Jason Ensor and Dr Helen Bones</title>
+    	<title>LINKED ARCHIVES: Western Sydney University, Dr Jason Ensor and Dr Helen Bones</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv='cache-control' content='no-cache'>
 		<meta http-equiv='expires' content='0'>
 		<meta http-equiv='pragma' content='no-cache'>
-        <meta name="description" content="ARCHIVER, Western Sydney University, Dr Jason Ensor and Dr Helen Bones: Funded by the Australian National Data Service (ANDS) and using the State Library of New South Wale's signature holdings on Angus and Robertson's operations throughout Australia as its central study, this project is about how we make better use of paper-based historical collections through digital technologies in ways that sustain and enhance archival practice and principles. Focusing on the diverse activities of Angus and Robertson's competition, cooperation and conflict with other Australian firms and individuals during the twentieth century becomes a way to focus on the interdependence of publishing organisations and players, in which each participant is part of a larger and complex whole. With so many interactions distributed among multiple volumes, understanding Angus and Robertson's total business through a historically tuned cultural analysis requires a step change in how research exploits digital technologies. Parallel with teasing out the complexities of Angus and Robertson's activities nationwide with other Australian authors, booksellers and publishers is the key principle of linking collections in new ways, where a document's relationship to other items in a volume is not only maintained but its relationship to other volumes and collections is exposed in ways better suited to our networked, data-intensive knowledge landscape." />
+        <meta name="description" content="LINKED ARCHIVES, Western Sydney University, Dr Jason Ensor and Dr Helen Bones: Funded by the Australian National Data Service (ANDS) and using the State Library of New South Wale's signature holdings on Angus and Robertson's operations throughout Australia as its central study, this project is about how we make better use of paper-based historical collections through digital technologies in ways that sustain and enhance archival practice and principles. Focusing on the diverse activities of Angus and Robertson's competition, cooperation and conflict with other Australian firms and individuals during the twentieth century becomes a way to focus on the interdependence of publishing organisations and players, in which each participant is part of a larger and complex whole. With so many interactions distributed among multiple volumes, understanding Angus and Robertson's total business through a historically tuned cultural analysis requires a step change in how research exploits digital technologies. Parallel with teasing out the complexities of Angus and Robertson's activities nationwide with other Australian authors, booksellers and publishers is the key principle of linking collections in new ways, where a document's relationship to other items in a volume is not only maintained but its relationship to other volumes and collections is exposed in ways better suited to our networked, data-intensive knowledge landscape." />
         <meta name="robots" content="INDEX,FOLLOW" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1">    
         <meta name="theme-color" content="#ffffff" />  
@@ -436,6 +438,17 @@
 			
 			.btn {
 				white-space: normal;
+			}
+            
+            .btn-navigation {
+				background-color: #90322e !important;
+                font-weight: 700 !important;
+                padding: 3px !important;
+			}
+            
+            .btn-selected-navigation {
+                font-weight: 700 !important;
+                padding: 3px !important;
 			}
 			
 			img.grayscale {
@@ -749,7 +762,7 @@
                     <div class="navbar-content clearfix">
                         <ul class="nav navbar-top-links pull-left">
                     		<li style="font-size: 1.4em; padding: 0.5em; color: #1b746c;" 
-                            	class="text-bold">&nbsp;<span style="color: #E12339;">ARCHIVER</span> : METADATA SEARCH + <span style="color: #e16c22;">EDITOR</span></li>
+                            	class="text-bold">&nbsp;LINKED ARCHIVES</li>
                			</ul>
                         <?php if(($_SESSION["administrator"] == "yes")) { ?>
                         <ul class="nav navbar-top-links pull-right hidden-xs hidden-sm hidden-md">

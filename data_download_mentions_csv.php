@@ -28,6 +28,7 @@
 //  VERSION 0.1
 //	30 May 2017
 //	18 October 2018
+//  24 october 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get	
@@ -46,9 +47,24 @@
 			echo "PROBLEM WITH CHARSET!";
 			die;
 		}
+        $doComplexSearch = "n";
 		$type = $_GET["type"];
 		$format = $_GET["format"];
+        $doDebug = $_GET["doDebug"];
 		$value_string = $_GET["value_string"];
+        $value_phrase = $_GET["value_phrase"];
+        $value_phrase = rtrim("$value_phrase","|");
+        if(($value_string != $value_phrase)) {
+            if(!preg_match("/$value_string/i","$value_phrase")) {
+                $value_phrase .= "|".$value_string;
+            }
+        }     
+        $searches = explode("|","$value_phrase");
+        $searches = array_filter($searches);
+        $having = count($searches);
+        if(($having > 1)) {
+           $doComplexSearch = "y"; 
+        }
 		$_GET = array();
 		$_POST = array();
 	}
@@ -60,18 +76,73 @@
 	if(($format == "rdfa")) {
 		$doPrefix = "y";
 	}	
+
+///////////////////////////////////////////////////////////// If Debug
+
+    if(($doDebug == "y")) {
+        echo "doComplexSearch = $doComplexSearch<br />";
+        echo "value_string = $value_string<br />";
+        echo "value_phrase = $value_phrase<br />";
+        echo "having = $having<br />";
+    }
+
+///////////////////////////////////////////////////////////// Get IDs for Selected Annotation(s)	
 	
-///////////////////////////////////////////////////////////// Get IDs for Selected Annotation	
-	
-	if(($value_string != "")) {
-		$IDs = array();
-		$queryD = "SELECT DISTINCT(dc_references) FROM annotations WHERE value_string = \"$value_string\" ";
-		$mysqli_resultD = mysqli_query($mysqli_link, $queryD);
-		while($rowD = mysqli_fetch_row($mysqli_resultD)) { 
-			$IDs[] = "$rowD[0]";
-			$rdf_found = "y";
-		}
-	}
+    if(($doComplexSearch == "n")) {
+        if(($value_string != "")) {
+            $IDs = array();
+            $queryD = "SELECT DISTINCT(dc_references) FROM annotations WHERE value_string = \"$value_string\" ";
+            $mysqli_resultD = mysqli_query($mysqli_link, $queryD);
+            while($rowD = mysqli_fetch_row($mysqli_resultD)) { 
+                $IDs[] = "$rowD[0]";
+                $rdf_found = "y";
+            }
+            if(($doDebug == "y")) {
+                echo "queryD = $queryD<br />";
+                echo "ID count = ".count($IDs)."<br />";
+            }
+        }
+    } else {
+        if(($value_phrase != "")) {
+            $findmeAgain = "";
+            foreach($searches as $w) {
+                $i++;
+				if(($i == $having)) {
+                    $findmeAgain .= "annotations.value_string = \"$w\"";
+                } else {
+                    $findmeAgain .= "annotations.value_string = \"$w\" OR ";   
+                }
+            }
+            $IDs = array();
+            $queryA = "SELECT ";
+			$queryA .= "annotations.dc_references, ";
+			$queryA .= "items.dc_identifier, ";
+//			$queryA .= "COUNT(annotations.dc_references) AS goal ";
+            $queryA .= "COUNT(DISTINCT annotations.value_string) AS goal ";
+			$queryA .= "FROM annotations ";
+			$queryA .= "LEFT JOIN items ";
+			$queryA .= "ON annotations.dc_references = items.dc_identifier ";
+			$queryA .= "WHERE ($findmeAgain) ";
+			$queryA .= "GROUP BY annotations.dc_references ";
+			$queryA .= "HAVING goal = $having ";
+			$queryA .= "ORDER BY items.dc_title ASC ";
+            $mysqli_resultA = mysqli_query($mysqli_link, $queryA);
+			while($rowA = mysqli_fetch_row($mysqli_resultA)) {
+				$IDs[] = $rowA[0];
+                $rdf_found = "y";
+			}
+            if(($doDebug == "y")) {
+                echo "queryA = $queryA<br />";
+                echo "ID count = ".count($IDs)."<br />";
+            }
+        }
+    }
+
+///////////////////////////////////////////////////////////// If Debug End
+
+    if(($doDebug == "y")) {
+        die;   
+    }
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Get CSV Details
 

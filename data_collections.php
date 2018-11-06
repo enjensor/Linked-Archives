@@ -39,6 +39,7 @@
 //	5 February 2018
 //	6-9 August 2018
 // 	18 October 2018
+//	22 Octeober 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get	
@@ -134,41 +135,43 @@
 //		
 /////////////////////////// Detail OCR + Locked Docs		
 		
-		$queryDXi = "SELECT COUNT(*) FROM items WHERE ";
-		$queryDXi .= "dc_description != \"\" AND ";
-		$queryDXi .= "collections_dc_identifier = \"$dc_identifier\" ";
-		$mysqli_resultX = mysqli_query($mysqli_link, $queryDXi);
-		while($rowX = mysqli_fetch_row($mysqli_resultX)) { 
-			$ocr_docs = $rowX[0];
+		if(($_SESSION["administrator"] == "yes")) {
+			$queryDXi = "SELECT COUNT(*) FROM items WHERE ";
+			$queryDXi .= "dc_description != \"\" AND ";
+			$queryDXi .= "collections_dc_identifier = \"$dc_identifier\" ";
+			$mysqli_resultX = mysqli_query($mysqli_link, $queryDXi);
+			while($rowX = mysqli_fetch_row($mysqli_resultX)) { 
+				$ocr_docs = $rowX[0];
+			}
+			$queryDXi = "SELECT COUNT(*) FROM items WHERE ";
+			$queryDXi .= "dct_accessRights = \"restricted\" AND ";
+			$queryDXi .= "collections_dc_identifier = \"$dc_identifier\" ";
+			$mysqli_resultX = mysqli_query($mysqli_link, $queryDXi);
+			while($rowX = mysqli_fetch_row($mysqli_resultX)) { 
+				$lock_docs = $rowX[0];
+			}
+			if(($ocr_docs == "0")) { 
+				$ocr_docs = "000"; 
+			}
+			if(($lock_docs == "0")) { 
+				$lock_docs = "000"; 
+			}
+			if(($ocr_docs > "0") AND ($ocr_docs != "000") AND ($ocr_docs < 10)) { 
+				$ocr_docs = "00".$ocr_docs; 
+			}
+			if(($ocr_docs > "9") AND ($ocr_docs != "000") AND ($ocr_docs < 100)) { 
+				$ocr_docs = "0".$ocr_docs; 
+			}		
+			if(($lock_docs > "0") AND ($lock_docs != "000") AND ($lock_docs < 10)) { 
+				$lock_docs = "00".$lock_docs; 
+			}
+			if(($lock_docs > "9") AND ($lock_docs != "000") AND ($lock_docs < 100)) { 
+				$lock_docs = "0".$lock_docs; 
+			}
+			$tooltip = $tempAcr.$docs_acronym."\n".$ocr_docs." Documents OCR\n".$lock_docs." Documents Locked";
+		} else {
+			$tooltip = "";
 		}
-		
-		$queryDXi = "SELECT COUNT(*) FROM items WHERE ";
-		$queryDXi .= "dct_accessRights = \"restricted\" AND ";
-		$queryDXi .= "collections_dc_identifier = \"$dc_identifier\" ";
-		$mysqli_resultX = mysqli_query($mysqli_link, $queryDXi);
-		while($rowX = mysqli_fetch_row($mysqli_resultX)) { 
-			$lock_docs = $rowX[0];
-		}
-		
-		if(($ocr_docs == "0")) { 
-			$ocr_docs = "000"; 
-		}
-		if(($lock_docs == "0")) { 
-			$lock_docs = "000"; 
-		}
-		if(($ocr_docs > "0") AND ($ocr_docs != "000") AND ($ocr_docs < 10)) { 
-			$ocr_docs = "00".$ocr_docs; 
-		}
-		if(($ocr_docs > "9") AND ($ocr_docs != "000") AND ($ocr_docs < 100)) { 
-			$ocr_docs = "0".$ocr_docs; 
-		}		
-		if(($lock_docs > "0") AND ($lock_docs != "000") AND ($lock_docs < 10)) { 
-			$lock_docs = "00".$lock_docs; 
-		}
-		if(($lock_docs > "9") AND ($lock_docs != "000") AND ($lock_docs < 100)) { 
-			$lock_docs = "0".$lock_docs; 
-		}
-		$tooltip = $tempAcr.$docs_acronym."\n".$ocr_docs." Documents OCR\n".$lock_docs." Documents Locked";
 		
 /////////////////////////// Archive Suffix Modifier FINISH		
 		

@@ -28,6 +28,7 @@
 //  VERSION 0.1
 //	30 June 2017
 //	7 July 2017
+//  7 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get	
@@ -101,7 +102,7 @@
 				$action = "UPDATE";
 			}
 		} else {
-			die("Something when wrong.<br />File does not appear to exist.<br />&nbsp;<br />");
+			die("Something when wrong.<br />File does not appear to exist.<br />$dc_identifier<br />&nbsp;<br />");
 		}
 	}
 	
@@ -163,7 +164,7 @@
 
 ///////////////////////////////////////////////////////////// Show OCR	
 	
-	$tRows = (substr_count($itemFields["dc_description"], "\n" ) * 2);
+	$tRows = ceil(substr_count($itemFields["dc_description"], "\n" ) * 1.1);
 	$scanTitle = "";
 	$scanTitle = preg_replace("/\_/i"," (",$itemFields["dc_title"]);
 	$scanTitle = preg_replace("/\:/i"," (",$scanTitle);
@@ -214,6 +215,33 @@
 			echo "id=\"input_scan_text\">";
 			echo "<strong>Recognise Text</strong>";
 			echo "</button>";
+            
+///////////////////////////////////// Automatic Tagging Button            
+            
+            if(($itemFields["dc_description"] != "")) { 
+                echo "<a href=\"javascript: ";
+                echo "var dataF = 'dc_identifier=";
+                echo $dc_identifier."&data_dc_identifier=";
+                echo $dc_identifier."&autotag=yes&reload=';	";
+                echo "var doDivM = $('#titleTags').fadeOut('fast', function(){ ";
+                echo "var doDivN = $('#titleTags').load('./data_meta.php',dataF, function(){ ";
+                echo "var doDivO = $('#titleTags').fadeIn('slow'); ";
+                echo "}); ";
+                echo "}); ";
+                echo "\">";
+                echo "<button ";
+                echo "class=\"btn btn-danger col-sm-12 col-md-12 col-lg-12\" style=\"margin-top: 4px;\" ";
+                echo "id=\"input_read_text\">";
+                echo "<strong>Discover Tags</strong>";
+                echo "</button>";
+                echo "</a>";
+                if(($tagMsg != "")) {
+                    echo "<br />&nbsp;<br />";
+                    echo "<div class=\"alert alert-dark\" role=\"alert\" style=\"text-align: center;\">";
+                    echo "$tagMsg";
+                    echo "</div>"; 
+                }
+            }
 		}
 	}
 

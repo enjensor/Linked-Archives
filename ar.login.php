@@ -32,6 +32,7 @@
 //	27-28 June 2017
 //	30 June 2017
 //	10 August 2018
+//  5-6 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Prevent Direct Access
@@ -60,27 +61,70 @@
 
 ?>
 <form id="signout" class="navbar-form pull-right" role="form" method="POST">
+    <div class="dropdown" style="display:inline-block; z-index: 5000;">
+      <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="width: 240px; height: 32px; background-color: #EEEEEE; color: #000000;"><strong>Search Selected Archives</strong>
+      <span class="caret"></span></button>
+      <ul class="dropdown-menu" id="usercollections" name="usercollections">
+        <?php
+            $ck = 1;
+            $thisQ = "SELECT skos_orderedCollection, bf_heldBy ";
+            $thisQ .= "FROM collections GROUP BY skos_orderedCollection, bf_heldBy ";
+            $thisQ .= "ORDER BY bf_heldBy ASC ";
+            $mysqli_thisQ = mysqli_query($mysqli_link, $thisQ);
+            while($Qrow = mysqli_fetch_row($mysqli_thisQ)) { 
+                if((preg_match("/Allen/i","$Qrow[0]") or preg_match("/UGD/i","$Qrow[0]"))) {
+                    $checked = "";
+                } else {
+                    $checked = "checked";
+                }
+                echo "<li style=\"background-color: #FFFFFF; padding-top: 4px; padding-bottom: 4px; width: 240px;\">";
+                echo "<a href=\"#\">";
+                echo "<input type=\"checkbox\" ";
+                echo "value=\"$Qrow[0]\" ";
+                echo "id=\"usercol_".$ck."\" ";
+                echo "name=\"usercol_".$ck."\" ";
+                echo "$checked style=\"transform: scale(1.4);\" />";
+                echo "&nbsp;&nbsp;&nbsp;";
+                echo "<strong>$Qrow[0]</strong><br />";
+                $heldAt = explode(",","$Qrow[1]");
+                echo "<span style=\"padding-left: 2.0em; font-size: 0.9em;\">$heldAt[0]</span>";
+                echo "</a></li>"; 
+                $ck++;
+            }
+        ?>
+      </ul>
+    </div>
 	<div class="input-group"><input id="usersearch" type="text" class="form-control" 
     	name="usersearch" value="" placeholder="Quick Tag Search" style="width: 200px;" onclick="var clearThis = $('#usersearch').val('');">
     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span></div>
     <div class="input-group"><input id="standinName" type="text" class="form-control" name="standinName" value="<?php echo $_SESSION["username"]; ?>" readonly style="color: #000000;"></div>
 	<input id="userlogout" type="hidden" class="form-control" name="userlogout" value="yes">                                        
-	<button type="submit" class="btn btn-info">Logout</button>
+	<button type="submit" class="btn btn-info" style="height: 32px;">Logout</button>
 </form>
 <script language="javascript" type="text/javascript" >
 
 	$(document).ready(function() {
 		$('#usersearch').bind('keyup input',function(event) {	
 			var myLength = $("#usersearch").val().length;
-			if(myLength > 3) {					
+			if(myLength > 3) {
+                var userCols = "Collections";
+                <?php
+                    for($c=1;$c<$ck;$c++) {
+                        echo "if($('#usercol_".$c."').is(\":checked\")){ ";
+                        echo "var userVal = $('#usercol_".$c."').val(); ";
+                        echo "if(userVal != \"\") { ";
+                        echo "userCols = (userCols + \",\" + userVal); ";
+                        echo "} ";          
+                        echo "}\n";
+                    }
+                ?>
 				$("#usersearch").autocomplete({
 					source: function(request, response){
 						$.ajax({
 							url: "./data_annotations_search.php",
 							dataType: "json",
 							data: {
-								term : request.term,
-								variation : "ANNOTATIONS"
+								term : request.term, variation : "" + userCols
 							},
 							success: function (data) {
 								response(data);
@@ -127,12 +171,45 @@
 		
 ?>
 <form id="signin" class="navbar-form pull-right" role="form" method="POST">
+    <div class="dropdown" style="display:inline-block; z-index: 5000;">
+      <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="width: 240px; height: 32px; background-color: #EEEEEE; color: #000000;"><strong>Search Selected Archives</strong>
+      <span class="caret"></span></button>
+      <ul class="dropdown-menu" id="usercollections" name="usercollections">
+        <?php
+            $ck = 1;
+            $thisQ = "SELECT skos_orderedCollection, bf_heldBy ";
+            $thisQ .= "FROM collections GROUP BY skos_orderedCollection, bf_heldBy ";
+            $thisQ .= "ORDER BY bf_heldBy ASC ";
+            $mysqli_thisQ = mysqli_query($mysqli_link, $thisQ);
+            while($Qrow = mysqli_fetch_row($mysqli_thisQ)) { 
+                if((preg_match("/Allen/i","$Qrow[0]") or preg_match("/UGD/i","$Qrow[0]"))) {
+                    $checked = "";
+                } else {
+                    $checked = "checked";
+                }
+                echo "<li style=\"background-color: #FFFFFF; padding-top: 4px; padding-bottom: 4px; width: 240px;\">";
+                echo "<a href=\"#\">";
+                echo "<input type=\"checkbox\" ";
+                echo "value=\"$Qrow[0]\" ";
+                echo "id=\"usercol_".$ck."\" ";
+                echo "name=\"usercol_".$ck."\" ";
+                echo "$checked style=\"transform: scale(1.4);\" />";
+                echo "&nbsp;&nbsp;&nbsp;";
+                echo "<strong>$Qrow[0]</strong><br />";
+                $heldAt = explode(",","$Qrow[1]");
+                echo "<span style=\"padding-left: 2.0em; font-size: 0.9em;\">$heldAt[0]</span>";
+                echo "</a></li>"; 
+                $ck++;
+            }
+        ?>
+      </ul>
+    </div>
     <div class="input-group"><input id="mygosearch" type="text" class="form-control" name="mygosearch" value="" 
     	placeholder="Quick Tag Search" style="width: 200px;" onclick="var clearThis = $('#usersearch').val('');" autocomplete="off">
     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span></div>
 	<div class="input-group"><input id="userlogin" type="email" class="form-control" name="userlogin" value="" placeholder="Email Address" style="width: 260px;"></div>
 	<div class="input-group"><input id="userpassword" type="password" class="form-control" name="userpassword" value="" placeholder="Password"></div>
-	<button type="submit" class="btn btn-success">Login</button>
+	<button type="submit" class="btn btn-success" style="height: 32px;">Login</button>
 </form>
 <script language="javascript" type="text/javascript" >
 
@@ -140,15 +217,25 @@
 		$('#mygosearch').attr('autocomplete', 'off');
 		$('#mygosearch').bind('keyup input',function(event) {	
 			var myLength = $("#mygosearch").val().length;
-			if(myLength > 3) {					
+			if(myLength > 3) {	
+                var userCols = "Collections";
+                <?php
+                    for($c=1;$c<$ck;$c++) {
+                        echo "if($('#usercol_".$c."').is(\":checked\")){ ";
+                        echo "var userVal = $('#usercol_".$c."').val(); ";
+                        echo "if(userVal != \"\") { ";
+                        echo "userCols = (userCols + \",\" + userVal); ";
+                        echo "} ";          
+                        echo "}\n";
+                    }
+                ?>
 				$("#mygosearch").autocomplete({
 					source: function(request, response){
 						$.ajax({
 							url: "./data_annotations_search.php",
 							dataType: "json",
 							data: {
-								term : request.term,
-								variation : "ANNOTATIONS"
+								term : request.term, variation : "" + userCols
 							},
 							success: function (data) {
 								response(data);
