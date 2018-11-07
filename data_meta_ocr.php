@@ -63,7 +63,7 @@
 	if(($action == "SCAN") && ($dc_identifier != "") && ($scanTitle != "")) {
 		$imgFile = "data/items/".$scanTitle.".jpg";
 		if(file_exists($imgFile)) {
-			$api_key = 'AIzaSyB1CnX6aWH7wIFtltoA1PbwL8auFL2th1g';
+			$api_key = '???';
 			$url = "https://vision.googleapis.com/v1/images:annotate?key=" . $api_key;
 //			$detection_type = "TEXT_DETECTION";
 			$detection_type = "DOCUMENT_TEXT_DETECTION";
