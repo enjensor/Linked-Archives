@@ -73,7 +73,7 @@
 /////////////////////////////////////////////////////////// Main DB configuration
 
 	$serverName = $_SERVER["SERVER_NAME"];
-
+	$google_api_key = '***';
     $localhost = "localhost";
     $username = "***";
     $password = "***";
