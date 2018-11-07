@@ -99,6 +99,7 @@
 				$response = json_decode($json_response, true);
 				$data_dc_description = $response['responses'][0]['textAnnotations'][0]['description'];
 				$action = "UPDATE";
+                $didText = "y";
 			}
 		} else {
 			die("Something when wrong.<br />File does not appear to exist.<br />$dc_identifier<br />&nbsp;<br />");
@@ -281,6 +282,16 @@
         			});
         		});	
 			});
+            
+<?php
+            if(($didText == "y")) {
+?>
+            var otherOcrID = "#OCR_<?php echo $dc_identifier; ?>";
+            var otherOcrCss = $(otherOcrID).css('color','#006dc3');          
+<?php
+            }
+            
+?>            
 	
 /////////////////////////////////////////////////////////// OnLoad Finish
 				

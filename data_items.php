@@ -41,6 +41,7 @@
 //	7 July 2017
 //	5 February 2018
 //	6-7 August 2018
+//  7 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get	
@@ -253,7 +254,11 @@
 			echo "<i id=\"OCR_".$rowD[2]."\" class=\"ion-document-text\" ";
 			echo "style=\"color:#006dc3; font-size: 1.4em;\" ></i>";
 			echo "&nbsp;&nbsp;&nbsp;";
-		}
+		} else {
+            echo "<i id=\"OCR_".$rowD[2]."\" class=\"ion-document-text\" ";
+			echo "style=\"color:#cccccc; font-size: 1.4em;\" ></i>";
+			echo "&nbsp;&nbsp;&nbsp;";
+        }
 		
 ///////////////////////////////////// Flag Report		
 		
