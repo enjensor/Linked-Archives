@@ -48,7 +48,7 @@
 //	6-13 August 2018
 //	20 August 2018
 //  29 October 2018
-//  6 November 2018
+//  6-7 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Prevent Direct Access of Included Files
@@ -756,7 +756,7 @@
 				<div id="navbar-container" class="boxed" style="height: 47px;">
 					<div class="navbar-header" style="height: 47px;">
                     	<a href="./" class="navbar-brand">
-                        	<img src="./img/logo_trans.png" alt="WSU Logo" class="brand-icon" style="padding-left: 5px; padding-top: 5px; padding-bottom: 0px;">
+                        	<img src="./img/logo_trans.png" alt="WSU Logo" class="brand-icon" style="padding-left: 5px; padding-top: 10px; padding-bottom: 0px;">
                         </a>
                 	</div>
                     <div class="navbar-content clearfix">
@@ -946,7 +946,7 @@
 						<div id="mainnav-menu-wrap">
                         	<div class="nano">
                             	<div class="nano-content">
-                                    <div id="mainnav-shortcut" style="max-height: 350px;">
+                                    <div id="mainnav-shortcut" style="max-height: 370px;">
                                         <ul class="list-unstyled">
                                           	<li class="col-xs-4" data-content="About ARCHIVER">
                                             	<a class="shortcut-grid extLinkB" id="extLinkB" href="./index_about.php"><i class="ion-information-circled" style="font-size: 1.2em;"></i></a></li>    
@@ -1009,8 +1009,8 @@
 ///////////////////// If Admin											
 											
 											if(($_SESSION["administrator"] == "yes")) { ?>
-                                            <li class="col-xs-4" data-content="Access MySQL Database">
-                                            	<a class="shortcut-grid" href="../ironchest/" target="_Database"><i class="ion-settings" style="font-size: 1.2em;"></i></a></li>
+                                            <li class="col-xs-4" data-content="Admin">
+                                            	<a class="shortcut-grid" href="#"><i class="ion-settings" style="font-size: 1.2em;"></i></a></li>
                                             <?php } ?>
                                         </ul>
                                     </div>
