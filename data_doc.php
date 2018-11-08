@@ -37,6 +37,7 @@
 //	22-23 June 2017
 //	27-29 June 2017
 //	5 March 2018
+//  8 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Set reload var	
@@ -56,6 +57,17 @@
 			die;
 		}
 		$dc_identifier = $_GET["dc_identifier"];
+        $random = $_GET["random"];
+        if(($dc_identifier == "") && ($random == "yes")) {
+            $queryDX = "SELECT dc_identifier ";
+			$queryDX .= "FROM items ";
+			$queryDX .= "ORDER BY RAND() ";
+            $queryDX .= "LIMIT 1";
+            $mysqli_resultDX = mysqli_query($mysqli_link, $queryDX);
+            while($rowDX = mysqli_fetch_row($mysqli_resultDX)) { 
+                $dc_identifier = $rowDX[0];
+            }
+        }
 		$_GET = array();
 		$_POST = array();
 	} else {
@@ -123,7 +135,8 @@
 		
 		echo "<div ";
 		echo "class=\"parent\" ";
-		echo "id=\"imageLoader\" >";
+		echo "id=\"imageLoader\" ";
+		echo "style=\"overflow: visible!important;\">";
 		echo "<img ";
 		echo "class=\"bord-all grayscale\" ";
 		echo "src=\"";
@@ -146,10 +159,10 @@
 		echo "style=\"";
 		echo "color: #FFcc00; ";
 		echo "z-index: 9; ";
-		echo "background-color: rgba(35, 35, 35, 0.65);";
+		echo "background-color: rgba(35, 35, 35, 0.55);";
 		echo "position: absolute; ";
-		echo "bottom: 17px; ";
-		echo "height: 170px; ";
+		echo "bottom: 15px; ";
+		echo "height: 165px; ";
 		echo "padding: 25px; ";
 		echo "border-top-right-radius: 10px; ";
 		echo "width: 85%; ";
@@ -305,7 +318,7 @@
 				$panzoom.panzoom("zoom", <?php 
 								 
 					if((!preg_match("/MSS/i","$this_col_skos_OrderedCollection"))) {
-						echo "1.0";
+						echo "1.1";
 					} else {
 						echo "1.3";
 					}			 

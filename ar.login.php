@@ -33,6 +33,7 @@
 //	30 June 2017
 //	10 August 2018
 //  5-6 November 2018
+//  8 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Prevent Direct Access
@@ -62,7 +63,7 @@
 ?>
 <form id="signout" class="navbar-form pull-right" role="form" method="POST">
     <div class="dropdown" style="display:inline-block; z-index: 5000;">
-      <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="width: 240px; height: 32px; background-color: #EEEEEE; color: #000000;"><strong>Search Selected Archives</strong>
+      <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="width: 240px; height: 32px; background-color: #EEEEEE; color: #000000; font-size: 1.0em;">Search Selected Archives
       <span class="caret"></span></button>
       <ul class="dropdown-menu" id="usercollections" name="usercollections">
         <?php
@@ -95,11 +96,11 @@
       </ul>
     </div>
 	<div class="input-group"><input id="usersearch" type="text" class="form-control" 
-    	name="usersearch" value="" placeholder="Quick Tag Search" style="width: 200px;" onclick="var clearThis = $('#usersearch').val('');">
+    	name="usersearch" value="" placeholder="Quick Tag Search" style="width: 130px;" onclick="var clearThis = $('#usersearch').val('');">
     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span></div>
-    <div class="input-group"><input id="standinName" type="text" class="form-control" name="standinName" value="<?php echo $_SESSION["username"]; ?>" readonly style="color: #000000;"></div>
+    <div class="input-group"><input id="standinName" type="text" class="form-control" name="standinName" value="<?php echo $_SESSION["username"]; ?>" readonly style="color: #000000; width: 150px;"></div>
 	<input id="userlogout" type="hidden" class="form-control" name="userlogout" value="yes">                                        
-	<button type="submit" class="btn btn-info" style="height: 32px;">Logout</button>
+	<button type="submit" class="btn btn-info" style="height: 32px; width: 60px; font-size: 1.0em;">Logout</button>
 </form>
 <script language="javascript" type="text/javascript" >
 
@@ -172,7 +173,7 @@
 ?>
 <form id="signin" class="navbar-form pull-right" role="form" method="POST">
     <div class="dropdown" style="display:inline-block; z-index: 5000;">
-      <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="width: 240px; height: 32px; background-color: #EEEEEE; color: #000000;"><strong>Search Selected Archives</strong>
+      <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="width: 240px; height: 32px; background-color: #EEEEEE; color: #000000; font-size: 1.0em;">Search Selected Archives
       <span class="caret"></span></button>
       <ul class="dropdown-menu" id="usercollections" name="usercollections">
         <?php
@@ -205,11 +206,11 @@
       </ul>
     </div>
     <div class="input-group"><input id="mygosearch" type="text" class="form-control" name="mygosearch" value="" 
-    	placeholder="Quick Tag Search" style="width: 200px;" onclick="var clearThis = $('#usersearch').val('');" autocomplete="off">
+    	placeholder="Quick Tag Search" style="width: 130px;" onclick="var clearThis = $('#usersearch').val('');" autocomplete="off">
     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span></div>
-	<div class="input-group"><input id="userlogin" type="email" class="form-control" name="userlogin" value="" placeholder="Email Address" style="width: 260px;"></div>
-	<div class="input-group"><input id="userpassword" type="password" class="form-control" name="userpassword" value="" placeholder="Password"></div>
-	<button type="submit" class="btn btn-success" style="height: 32px;">Login</button>
+	<div class="input-group"><input id="userlogin" type="email" class="form-control" name="userlogin" value="" placeholder="Email Address" style="width: 120px;"></div>
+	<div class="input-group"><input id="userpassword" type="password" class="form-control" name="userpassword" value="" placeholder="Password" style="width: 120px;"></div>
+	<button type="submit" class="btn btn-success" style="height: 32px; width: 60px; font-size: 1.0em;">Login</button>
 </form>
 <script language="javascript" type="text/javascript" >
 

@@ -29,6 +29,7 @@
 //  5 January 2017
 //	3 April 2017
 //	10 August 2018
+//  8 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Prevent Direct Access
@@ -48,36 +49,20 @@
   		);
     	$output = preg_replace($search, '', $input);
     	return $output;
-  	}
+  	}	
 	
-	function sanitize($input) {
-		if (is_array($input)) {
-			foreach($input as $var=>$val) {
-				$output[$var] = sanitize($val);
-			}
-		}
-		else {
-			if (get_magic_quotes_gpc()) {
-				$input = stripslashes($input);
-			}
-			$input  = cleanInput($input);
-			$output = mysql_real_escape_string($input);
-		}
-		return $output;
-	}	
-	
-/////////////////////////////////////////////////////////// Session Handler Coming Soon	
-//	
-//	$_SESSION["credential_loginName"] = "jensor";
-//
+/////////////////////////////////////////////////////////// Special keys
+
+    $google_api_key = '***';
+
 /////////////////////////////////////////////////////////// Main DB configuration
 
-	$serverName = $_SERVER["SERVER_NAME"];
-	$google_api_key = '***';
-    $localhost = "localhost";
-    $username = "***";
-    $password = "***";
-    $database = "ar_metadata";
+    $serverName = $_SERVER["SERVER_NAME"];
+
+	$localhost = "localhost";
+	$username = "***";
+	$password = "***";
+	$database = "ar_metadata";
 
 /////////////////////////////////////////////////////////// Detaint all vars
 
@@ -85,14 +70,14 @@
 
 	foreach($_POST as $key => $value) {
 		$newVal = trim($value);
-//		$newVal = sanitize($newVal);
+		$newVal = cleanInput($newVal);
     	$newVal = mysqli_real_escape_string($dbc,$newVal);
 		$_POST[$key] = $newVal;
 	}
 
 	foreach($_GET as $key => $value) {
 		$newVal = trim($value);
-//		$newVal = sanitize($newVal);
+		$newVal = cleanInput($newVal);
     	$newVal = mysqli_real_escape_string($dbc,$newVal);
 		$_GET[$key] = $newVal;
 	}

@@ -48,7 +48,7 @@
 //	6-13 August 2018
 //	20 August 2018
 //  29 October 2018
-//  6-7 November 2018
+//  6-8 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Prevent Direct Access of Included Files
@@ -488,6 +488,10 @@
 			text {
 			  font-size: 12px;
 			}
+            
+            #imageLoader {
+			  overflow: visible!important;
+			}
 
 /* XS MEDIA QUERY */
 
@@ -761,7 +765,7 @@
                 	</div>
                     <div class="navbar-content clearfix">
                         <ul class="nav navbar-top-links pull-left">
-                    		<li style="font-size: 1.4em; padding: 0.5em; color: #1b746c;" 
+                    		<li style="font-size: 1.4em; padding: 0.7em; color: #1b746c;" 
                             	class="text-bold">&nbsp;LINKED ARCHIVES</li>
                			</ul>
                         <?php if(($_SESSION["administrator"] == "yes")) { ?>
@@ -775,7 +779,7 @@
 ///////////////////////////////////////////////// Login Routine
 						
 						$session_reload = "yes";
-						echo "<div class=\"hidden-xs hidden-sm hidden-md\">";
+						echo "<div class=\"hidden-xs hidden-sm\">";
 						include("./ar.login.php");	
 						echo "</div>";
 													
@@ -946,7 +950,7 @@
 						<div id="mainnav-menu-wrap">
                         	<div class="nano">
                             	<div class="nano-content">
-                                    <div id="mainnav-shortcut" style="max-height: 370px;">
+                                    <div id="mainnav-shortcut" style="max-height: 410px;">
                                         <ul class="list-unstyled">
                                           	<li class="col-xs-4" data-content="About ARCHIVER">
                                             	<a class="shortcut-grid extLinkB" id="extLinkB" href="./index_about.php"><i class="ion-information-circled" style="font-size: 1.2em;"></i></a></li>    
@@ -986,7 +990,15 @@
 													echo "var searchVal = $('#doc_detail').load('./data_googlebooks.php',dataE, function(){ ";
 													echo "}); ";
 												
-												?>"><i class="ion-document-text" style="font-size: 1.2em;"></i></a></li> 
+												?>"><i class="ion-document-text" style="font-size: 1.2em;"></i></a></li>
+                                            <li class="col-xs-4" data-content="View Random Item">
+                                            	<a class="shortcut-grid" href="javascript: <?php
+												
+													echo "var dataE = 'random=yes';	";		
+													echo "var searchVal = $('#doc_detail').load('./data_doc.php',dataE, function(){ ";
+													echo "}); ";
+												
+												?>"><i class="ion-help-circled" style="font-size: 1.2em;"></i></a></li>
                                             <?php 
 											
 ///////////////////// If Admin											
@@ -1211,18 +1223,33 @@
 				
 /////////////////////////////////////////////////////////// Sort Table				
 
-				$('#dt-basic').dataTable( {
-        			"responsive": true,
-					"sDom": '<"top">rt<"bottom"ilp><"clear">',
-					"width": "100%",
-					"fixedHeader": true,
-//					"order": [[ 0, "asc" ]],
-					"ordering": false,
-					"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], 
-					"scrollY": "71vh",
-					"scrollCollapse": false,
-	       			"paging": false
-				});	
+				if($(window).width() >= 1199){
+					$('#dt-basic').dataTable( {
+						"responsive": true,
+						"sDom": '<"top">rt<"bottom"ilp><"clear">', 
+						"width": "100%",
+						"fixedHeader": true,
+//						"order": [[ 0, "asc" ]],
+						"ordering": false,
+						"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], 
+						"scrollY": "71vh",
+						"scrollCollapse": false,
+						"paging": false
+					});	
+				} else {
+					$('#dt-basic').dataTable( {
+						"responsive": true,
+						"sDom": '<"top">rt<"bottom"ilp><"clear">', 
+						"width": "100%",
+						"fixedHeader": true,
+//						"order": [[ 0, "asc" ]],
+						"ordering": false,
+						"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], 
+						"scrollY": "65vh",
+						"scrollCollapse": false,
+						"paging": false
+					});
+				}
 				
 //				var doDivAZ = $(".dataTables_scrollHeadInner").css({"width":"97.65%"});	
 				var doDivAZ = $(".dataTables_scrollHeadInner").css({"width":"99%"});
