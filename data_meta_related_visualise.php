@@ -27,6 +27,7 @@
 //
 //  VERSION 0.1
 //  20 August 2018
+//  9 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get	
@@ -51,10 +52,10 @@
 ///////////////////////////////////////////////////////////// Start Page
 	
 ?>
-		<div id="visualiseConcept" class="row" style="padding: 0px; margin: 0px; width: 100%; height: 88vh;">
+		<div id="visualiseConcept" class="row" style="padding: 0px; margin: 0px; width: 100%; height: 90.8vh;">
 			<div id="parentConcept" class="col-lg-12 col-md-12 col-sm-12" 
-				 style="height: 88vh; width: 100%; background-color: #FFFFFF;">           
-				<svg id="svgConcept" style="width:100%; height:88vh; border: 0px solid #F8F9FA;"></svg>
+				 style="height: 90.8vh; width: 100%; background-color: #c9d1d7;">           
+				<svg id="svgConcept" style="width:100%; height:90.8vh; border: 0px solid #F8F9FA;"></svg>
 			</div>
 		</div>
 		<script language="javascript" type="text/javascript" >

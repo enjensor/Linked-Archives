@@ -48,7 +48,7 @@
 //	6-13 August 2018
 //	20 August 2018
 //  29 October 2018
-//  6-8 November 2018
+//  6-9 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Prevent Direct Access of Included Files
@@ -803,7 +803,7 @@
                             
                             <!-- Documents Panel -->
                           	<div class="col-lg-6 col-md-6" style="padding-left: 0px; padding-right: 0px;" id="arcDocPanel">
-                            	<div id="panel-detail" class="panel" style="border-radius: 0px;">
+                            	<div id="panel-detail" class="panel" style="border-radius: 0px; background-color: #cad1d6;">
                                     <div id="doc_detail" style="background-color: #000000;">
 									<?php
                                     
@@ -970,32 +970,44 @@
                                             <li class="col-xs-4" data-content="Map Letter Origins and Destinations">
                                             	<a class="shortcut-grid" href="javascript: <?php
 												
-													echo "var dataE = 'refresh=no';	";		
+													echo "var dataE = 'refresh=no';	";	
+                                                //    echo "var doDiv = $('#doc_detail').fadeOut('fast', function(){ ";
 													echo "var searchVal = $('#doc_detail').load('./data_map.php',dataE, function(){ ";
+												//	echo "var doDivAlso = $('#doc_detail').fadeIn('slow'); ";
+												//	echo "}); ";
 													echo "}); ";
 												
 												?>"><i class="ion-earth" style="font-size: 1.2em;"></i></a></li>  
                                             <li class="col-xs-4" data-content="Map Letter Mentions">
                                             	<a class="shortcut-grid" href="javascript: <?php
 												
-													echo "var dataE = 'refresh=no';	";		
+													echo "var dataE = 'refresh=no';	";	
+                                                //    echo "var doDiv = $('#doc_detail').fadeOut('fast', function(){ ";
 													echo "var searchVal = $('#doc_detail').load('./data_map_mentions.php',dataE, function(){ ";
+												//	echo "var doDivAlso = $('#doc_detail').fadeIn('slow'); ";
+												//	echo "}); ";
 													echo "}); ";
 												
 												?>"><i class="ion-map" style="font-size: 1.2em;"></i></a></li>   
                                             <li class="col-xs-4" data-content="View Books">
                                             	<a class="shortcut-grid" href="javascript: <?php
 												
-													echo "var dataE = 'refresh=no';	";		
+													echo "var dataE = 'refresh=no';	";	
+                                                    echo "var doDiv = $('#doc_detail').fadeOut('fast', function(){ ";
 													echo "var searchVal = $('#doc_detail').load('./data_googlebooks.php',dataE, function(){ ";
+													echo "var doDivAlso = $('#doc_detail').fadeIn('slow'); ";
+													echo "}); ";
 													echo "}); ";
 												
 												?>"><i class="ion-document-text" style="font-size: 1.2em;"></i></a></li>
                                             <li class="col-xs-4" data-content="View Random Item">
                                             	<a class="shortcut-grid" href="javascript: <?php
 												
-													echo "var dataE = 'random=yes';	";		
+													echo "var dataE = 'random=yes';	";	
+                                                    echo "var doDiv = $('#doc_detail').fadeOut('fast', function(){ ";
 													echo "var searchVal = $('#doc_detail').load('./data_doc.php',dataE, function(){ ";
+													echo "var doDivAlso = $('#doc_detail').fadeIn('slow'); ";
+													echo "}); ";
 													echo "}); ";
 												
 												?>"><i class="ion-help-circled" style="font-size: 1.2em;"></i></a></li>
@@ -1022,7 +1034,16 @@
 											
 											if(($_SESSION["administrator"] == "yes")) { ?>
                                             <li class="col-xs-4" data-content="Admin">
-                                            	<a class="shortcut-grid" href="#"><i class="ion-settings" style="font-size: 1.2em;"></i></a></li>
+                                            	<a class="shortcut-grid" href="javascript: <?php
+												
+													echo "var dataE = 'session=".time()."';	";	
+                                                    echo "var doDiv = $('#doc_detail').fadeOut('fast', function(){ ";
+													echo "var searchVal = $('#doc_detail').load('./index_admin.php',dataE, function(){ ";
+													echo "var doDivAlso = $('#doc_detail').fadeIn('slow'); ";
+													echo "}); ";
+													echo "}); ";
+												
+												?>"><i class="ion-settings" style="font-size: 1.2em;"></i></a></li>
                                             <?php } ?>
                                         </ul>
                                     </div>

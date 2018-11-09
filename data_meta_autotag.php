@@ -26,7 +26,7 @@
 //	JQuery UI | https://jqueryui.com/
 //
 //  VERSION 0.1
-//  6-7 November 2018
+//  6-8 November 2018
 //
 //
 /////////////////////////////////////////////////////////// If Directly Called
@@ -64,6 +64,10 @@
         $queryD .= "FROM annotations ";
         $queryD .= "WHERE (value_string != \"F.L.\" AND value_string != \"R.W.\") ";
         $queryD .= "AND rdfs_label != \"type\" ";
+        $queryD .= "AND rdfs_label != \"relatesToDocument\" ";
+        $queryD .= "AND rdfs_label != \"letter\" ";
+        $queryD .= "AND rdfs_label != \"EmotionCategory\" ";
+        $queryD .= "AND rdfs_label != \"publishingRole\" ";
         $queryD .= "GROUP BY value_string, reg_uri, rdfs_label ";
         $queryD .= "ORDER BY value_string, reg_uri, rdfs_label";
         $mysqli_resultD = mysqli_query($mysqli_link, $queryD);

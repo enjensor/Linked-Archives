@@ -28,6 +28,7 @@
 //  VERSION 0.1
 //	4-8 June 2017
 //	22 June 2017
+//  8-9 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get	
@@ -49,6 +50,7 @@
 			die;
 		}
 		$refresh = $_GET["refresh"];
+        $bookSearch = $_GET["bookSearch"];
 		$_GET = array();
 		$_POST = array();
 	}
@@ -57,151 +59,226 @@
 		
 	$i = 0;
 	$shuffle = array();
-	echo "<div ";
-	echo "id=\"googlebooksGallery\" ";
-	echo "class=\"googlebooksGallery\" ";
-	echo "style=\"";
-	echo "padding: 7px; ";
-	echo "text-align: center; ";
-	echo "vertical-align: middle; ";
-	echo "overflow-y: scroll; ";
-	echo "overflow-x: hidden; ";
-	echo "height: 90.5vh; ";
-	echo "max-height: 90.5vh; ";
-	echo "background-color: #222222; ";
-	echo "width: 100%; ";
-	echo "\">";
+    if(($refresh != "y")) {
+        echo "<div ";
+        echo "id=\"googlebooksGallery\" ";
+        echo "class=\"googlebooksGallery\" ";
+        echo "style=\"";
+        echo "padding: 20px; ";
+        echo "text-align: center; ";
+        echo "vertical-align: middle; ";
+        echo "overflow-y: scroll; ";
+        echo "overflow-x: hidden; ";
+        echo "height: 90.8vh; ";
+        echo "max-height: 90.8vh; ";
+        echo "background-color: #c9d1d7; ";
+        echo "width: 100%; ";
+        echo "\">";
+
+//////////////////////////////// Search Bar
+
+        echo "<div class=\"input-group\" style=\"margin-bottom: 15px; width: 50%; \">";
+        echo "<input id=\"bookSearch\" ";
+        echo "type=\"text\" ";
+        echo "class=\"form-control\" ";
+        echo "name=\"bookSearch\" ";
+        echo "value=\"\" ";
+        echo "placeholder=\"Book Title / Author Search\" ";
+        echo "style=\"\" ";
+        echo "onclick=\"var clearThis = $('#bookSearch').val('');\" ";
+        echo ">";
+        echo "<span class=\"input-group-addon\" ";
+        echo "style=\"background-color: #000000; color: #FFFFFF;\">";
+        echo "<i class=\"glyphicon glyphicon-search\"></i>";
+        echo "</span>";
+        echo "</div>";
 
 //////////////////////////////// Masonry wrapper
 	
-	echo "<div ";
-	echo "style=\"position: relative; ";
-	echo "-moz-column-count: 5; ";
-	echo "-webkit-column-count: 5; ";
-	echo "column-count: 5; ";
-	echo "width: 100%; ";
-	echo "\">";
+        echo "<div ";
+        echo "id=\"bookSearchResults\" ";
+        echo "style=\"position: relative; ";
+        echo "-moz-column-count: 5; ";
+        echo "-webkit-column-count: 5; ";
+        echo "column-count: 5; ";
+        echo "width: 100%; ";
+        echo "\">";
+    }
 
 //////////////////////////////// Start DB Query
 	
 	$queryD = "SELECT ";
-	$queryD .= "g1.ID, ";
-	$queryD .= "g2.ID, ";
-	$queryD .= "g1.volumeInfo_title, ";
-	$queryD .= "g2.value_string, ";
-	$queryD .= "g1.volumeInfo_title, ";
-	$queryD .= "g1.volumeInfo_authors, ";
-	$queryD .= "g1.volumeInfo_description, ";
-	$queryD .= "g1.volumeInfo_thumbnail ";
-	$queryD .= "FROM datasource_googlebooks g1 ";
-	$queryD .= "JOIN datasource_googlebooks g2 ON g1.ID = g2.ID ";
-	$queryD .= "AND g1.volumeInfo_title LIKE g2.value_string ";
-	$queryD .= "AND g1.volumeInfo_thumbnail != \"\" ";
-	$queryD .= "ORDER BY RAND() LIMIT 70";
+	$queryD .= "datasource_googlebooks.ID, ";
+	$queryD .= "datasource_googlebooks.ID, ";
+	$queryD .= "datasource_googlebooks.volumeInfo_title, ";
+	$queryD .= "datasource_googlebooks.value_string, ";
+	$queryD .= "datasource_googlebooks.volumeInfo_title, ";
+	$queryD .= "datasource_googlebooks.volumeInfo_authors, ";
+	$queryD .= "datasource_googlebooks.volumeInfo_description, ";
+	$queryD .= "datasource_googlebooks.volumeInfo_thumbnail ";
+	$queryD .= "FROM datasource_googlebooks ";
+	$queryD .= "WHERE datasource_googlebooks.volumeInfo_thumbnail != \"\" ";
+    if(($bookSearch != "")) {
+        $queryD .= "AND (datasource_googlebooks.volumeInfo_title LIKE \"%".$bookSearch."%\" ";
+        $queryD .= "OR datasource_googlebooks.volumeInfo_authors LIKE \"%".$bookSearch."%\") ";
+    }
+    if(($bookSearch == "")) {
+        $queryD .= "ORDER BY RAND() ";
+        $queryD .= "LIMIT 30";
+    } else {
+        $queryD .= "ORDER BY datasource_googlebooks.volumeInfo_title ASC ";
+        $queryD .= "LIMIT 30";
+    }
 	$mysqli_resultD = mysqli_query($mysqli_link, $queryD);
 	while($rowD = mysqli_fetch_row($mysqli_resultD)) { 
 		$shuffleTemp = "";
-		$img  = preg_replace("/ /","_","$rowD[2]");
+		$img  = preg_replace("/ /","_","$rowD[3]");
 		$img = "./img_googlebooks/".$img.".jpg";
-		if(file_exists($img)) {
 			
 //////////////////////////////// Open Div			
 			
-			$shuffleTemp = "<div ";
-			$shuffleTemp .= "style=\"display: inline-block; padding: 7px;\" ";
-			$shuffleTemp .= ">";
+        $shuffleTemp = "<div ";
+        $shuffleTemp .= "style=\"display: inline-block; padding-bottom: 15px;\" ";
+        $shuffleTemp .= ">";
 			
 //////////////////////////////// Open Href			
 			
-			$shuffleTemp .= "<a href=\"javascript: ";
-			$shuffleTemp .= "var dataE = 'action=find&search=".$rowD[3]."&searchPhrase=';	";		
-			$shuffleTemp .= "var doDiv = $('#tableResultsContainer').fadeOut('fast', function(){ ";
-			$shuffleTemp .= "var searchVal = $('#tableResultsContainer').load('./data_subjects.php',dataE, function(){ ";
-			$shuffleTemp .= "var doDivAlso = $('#tableResultsContainer').fadeIn('slow'); ";
-			$shuffleTemp .= "}); ";
-			$shuffleTemp .= "}); ";
-			$shuffleTemp .= "var dataSearchD = 'searchTerm=".$rowD[3]."&searchPhrase=';	";
-			$shuffleTemp .= "var doDivSearchE = $('#titleTags').fadeOut('fast', function(){ ";
-			$shuffleTemp .= "var doDivSearchF = $('#titleTags').load('./index_find_subjects.php',dataSearchD, function(){ ";
-			$shuffleTemp .= "var doDivSearchG = $('#titleTags').fadeIn('slow'); ";
-			$shuffleTemp .= "}); ";
-			$shuffleTemp .= "}); ";
-			$shuffleTemp .= "\" ";
-			$shuffleTemp .= "data-toggle=\"popover\" ";
-			$shuffleTemp .= "title=\"";
+        $shuffleTemp .= "<a href=\"javascript: ";
+        $shuffleTemp .= "var dataE = 'action=find&search=".$rowD[3]."&searchPhrase=';	";		
+        $shuffleTemp .= "var doDiv = $('#tableResultsContainer').fadeOut('fast', function(){ ";
+        $shuffleTemp .= "var searchVal = $('#tableResultsContainer').load('./data_subjects.php',dataE, function(){ ";
+        $shuffleTemp .= "var doDivAlso = $('#tableResultsContainer').fadeIn('slow'); ";
+        $shuffleTemp .= "}); ";
+        $shuffleTemp .= "}); ";
+        $shuffleTemp .= "var dataSearchD = 'searchTerm=".$rowD[3]."&searchPhrase=';	";
+        $shuffleTemp .= "var doDivSearchE = $('#titleTags').fadeOut('fast', function(){ ";
+        $shuffleTemp .= "var doDivSearchF = $('#titleTags').load('./index_find_subjects.php',dataSearchD, function(){ ";
+        $shuffleTemp .= "var doDivSearchG = $('#titleTags').fadeIn('slow'); ";
+        $shuffleTemp .= "}); ";
+        $shuffleTemp .= "}); ";
+        $shuffleTemp .= "\" ";
+        $shuffleTemp .= "data-toggle=\"popover\" ";
+        $shuffleTemp .= "title=\"";
 			
 //////////////////////////////// Popover content start			
 			
-			$shuffleTemp .= "<span style='font-size:1.2em;'>";
-			$shuffleTemp .= "$rowD[3]";
-			$shuffleTemp .= "</span>";
-			$shuffleTemp .= "<br />";
-			$shuffleTemp .= "<span style='font-size:0.9em;'><strong>$rowD[5]</strong>";
-			if(($rowD[6] != "")) {
-				$rowD[6] = preg_replace("/\"/","","$rowD[6]");
-				$rowD[6] = preg_replace("/\'/","","$rowD[6]");
-				if (strlen($rowD[6]) > 500) {
-   					$rowD[6]= substr($rowD[6], 0, 500) . ' ...';
-				}
-				$shuffleTemp .= "<br />";
-				$shuffleTemp .= "$rowD[6]";
-			}
-			$shuffleTemp .= "</span>";
+        $shuffleTemp .= "<span style='font-size:1.2em;'>";
+        $shuffleTemp .= "$rowD[3]";
+        $shuffleTemp .= "</span>";
+        $shuffleTemp .= "<br />";
+        $shuffleTemp .= "<span style='font-size:0.9em;'><strong>$rowD[5]</strong>";
+        if(($rowD[6] != "")) {
+            $rowD[6] = preg_replace("/\"/","","$rowD[6]");
+            $rowD[6] = preg_replace("/\'/","","$rowD[6]");
+            if (strlen($rowD[6]) > 500) {
+                $rowD[6]= substr($rowD[6], 0, 500) . ' ...';
+            }
+            $shuffleTemp .= "<br />";
+            $shuffleTemp .= "$rowD[6]";
+        }
+        $shuffleTemp .= "</span>";
 			
 //////////////////////////////// Popover content end			
 			
-			$shuffleTemp .= "\" ";
-			$shuffleTemp .= "data-content=\"\" ";
-			$shuffleTemp .= "data-html=\"true\" ";
-			$shuffleTemp .= "class=\"red-tooltip\" ";
-			$shuffleTemp .= ">";
+        $shuffleTemp .= "\" ";
+        $shuffleTemp .= "data-content=\"\" ";
+        $shuffleTemp .= "data-html=\"true\" ";
+        $shuffleTemp .= "class=\"red-tooltip\" ";
+        $shuffleTemp .= ">";
 			
 //////////////////////////////// Image			
 			
-			$shuffleTemp .= "<img src=\"".$img."\" ";
-//			$shuffleTemp .= "width=\"120\" ";
-//			$shuffleTemp .= "height=\"200\" ";
-			$shuffleTemp .= "alt=\"\" ";
-			$shuffleTemp .= "title=\"";
-			$shuffleTemp .= "\" ";
-			$shuffleTemp .= "style=\"";
-			$shuffleTemp .= "border: 3px solid #FFFFFF; ";
-			$shuffleTemp .= "border-radius: 5px; ";
-			$shuffleTemp .= "width: 100%; ";
-			$shuffleTemp .= "\">";
+        $shuffleTemp .= "<img src=\"".$img."\" ";
+        $shuffleTemp .= "alt=\"\" ";
+        $shuffleTemp .= "title=\"";
+        $shuffleTemp .= "\" ";
+        $shuffleTemp .= "style=\"";
+        $shuffleTemp .= "border: 3px solid #000000; ";
+        $shuffleTemp .= "border-radius: 0px; ";
+        $shuffleTemp .= "width: 100%; ";
+        $shuffleTemp .= "\">";
 			
 //////////////////////////////// Close Href			
 			
-			$shuffleTemp .= "</a>";
+        $shuffleTemp .= "</a>";
 			
 //////////////////////////////// Close Div			
 			
-			$shuffleTemp .= "</div>";
-			$shuffle[] = $shuffleTemp;
-			$i++;
-		}
+        $shuffleTemp .= "</div>";
+        $shuffle[] = $shuffleTemp;
+        $i++;
+		
 	}
+
+//////////////////////////////// Build display
+
 	$shuffle = array_unique($shuffle);
-	for($x=0;$x<50;$x++) {
+	for($x=0;$x<30;$x++) {
 		echo $shuffle[$x];
 	}
 	
 //////////////////////////////// Close masonry wrapper and content divs	
 	
-	echo "</div>\n";
-	echo "</div>\n";
+    if(($refresh != "y")) {
+        echo "</div>\n";
+        echo "</div>\n";
 
 ///////////////////////////////////////////////////////////// Load page scripts
 
 ?>
-<script language="javascript" type="text/javascript" >
+    <script language="javascript" type="text/javascript" >
 
-	$(document).ready(function() {
-		$('[data-toggle="popover"]').tooltip({'trigger':'hover','placement': 'right'});
-	});
+        function delay(callback, ms) {
+          var timer = 0;
+          return function() {
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+              callback.apply(context, args);
+            }, ms || 0);
+          };
+        }
+        
+        $(document).ready(function() {
 
-</script>
+            $('[data-toggle="popover"]').tooltip({'trigger':'hover','placement': 'right'});
+
+            $('#bookSearch').keyup(delay(function (event) {	
+                var myLength = $("#bookSearch").val().length;
+                if(myLength => 3) {
+                    var searchBar = $('#bookSearch').val();	
+                    var dataE = 'refresh=y&bookSearch='+searchBar;		
+                    var doDiv = $('#bookSearchResults').fadeOut('fast', function(){
+                        var searchVal = $('#bookSearchResults').load('./data_googlebooks.php',dataE, function(){
+                            var doDivAlso = $('#bookSearchResults').fadeIn('slow');
+                        });
+                    });						
+                }
+            },650));
+            $('#bookSearch').keypress(function(event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                }
+            });        
+
+        });
+
+    </script>
 <?php
+        
+    } else {
+       
+?>
+    <script language="javascript" type="text/javascript" >
+       
+         $(document).ready(function() {
+             $('[data-toggle="popover"]').tooltip({'trigger':'hover','placement': 'right'});
+         });
+        
+    </script>
+<?php
+        
+    }
 
 ///////////////////////////////////////////////////////////// Finish
 
