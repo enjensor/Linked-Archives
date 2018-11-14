@@ -27,6 +27,7 @@
 //
 //  VERSION 0.1
 //	8 November 2018
+//  11-14 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Clean post and get       
@@ -75,10 +76,31 @@
         echo "<div class=\"col-lg-12 col-md-12 panel-heading\">";
         echo "<h3 class=\"panel-title\"><strong>BACK OFFICE</strong></h3>";
         
-///////////////////////////////// Discover Tags       
+///////////////////////////////// Left Column Open    
         
         echo "<div class=\"col-lg-6 col-md-6\" style=\"padding-left: 0px; padding-right: 0px;\">";
+
+///////////////////////////////// Create Collection        
+        
         echo "<div id=\"adminFunctions\" class=\"panel-body text-dark\" style=\"border-top: 1px solid #bbbbbb;\">";
+        echo "<p><strong>CREATE COLLECTION</strong></p>";
+        echo "<p>There are two parts to adding a new collection into Linked Archives. First, you must create the ";
+        echo "collection record in the database using the button below and then you must upload images into that collection. For this first part, ";
+        echo "you need textual details of the collection (such as institutional holder, collection title, manuscript ";
+        echo "name, and box / volume, folder numbers).</p>";
+        echo "<a href=\"./data_form_collection.php\" id=\"admin_collection_link\">";
+        echo "<button ";
+        echo "class=\"btn btn-danger col-sm-12 col-md-12 col-lg-12\" ";
+        echo "style=\"margin-top: 1.0em; margin-bottom: 1.0em;\" ";
+        echo "id=\"admin_collection\">";
+        echo "<strong>Add Archive</strong>";
+        echo "</button>";
+        echo "</a>";
+        echo "</div>";
+        
+///////////////////////////////// Discover Tags         
+        
+        echo "<div id=\"adminFunctions\" class=\"panel-body text-dark\" style=\"border-top: 0px solid #bbbbbb;\">";
         echo "<p><strong>DISCOVER TAGS</strong></p>";
         echo "<p>To automatically tag documents, Linked Archives uses Google Vision to apply optical character ";
         echo "recognition (OCR), with the results stored in the Linked Archives database. A 'discover tags' ";
@@ -102,12 +124,35 @@
         echo "style=\"padding-left: 0px; padding-right: 0px;\">";
         echo "</div>";
         echo "</div>";
+        
+///////////////////////////////// Left Column Close        
+        
         echo "</div>";
 
-///////////////////////////////// Match Google Books        
+///////////////////////////////// Right Column Open        
         
         echo "<div class=\"col-lg-6 col-md-6\" style=\"padding-left: 0px; padding-right: 0px;\">";
+
+///////////////////////////////// Upload Items        
+        
         echo "<div id=\"adminFunctions\" class=\"panel-body text-dark\" style=\"border-top: 1px solid #bbbbbb;\">";
+        echo "<p><strong>ADD ITEMS</strong></p>";
+        echo "<p>This is the second part to adding a new collection into Linked Archives where you upload images into the ";
+        echo "collection you just created. For this part, you need access to your local folder of photographs, ";
+        echo "scanned or downloaded images.</p>";
+        echo "<a href=\"./data_form_images.php\" id=\"admin_items_link\">";
+        echo "<button ";
+        echo "class=\"btn btn-info col-sm-12 col-md-12 col-lg-12\" ";
+        echo "style=\"margin-top: 1.0em; margin-bottom: 1.0em;\" ";
+        echo "id=\"admin_items\">";
+        echo "<strong>Upload Images</strong>";
+        echo "</button>";
+        echo "</a>";
+        echo "</div>";        
+        
+///////////////////////////////// Match Google Books        
+        
+        echo "<div id=\"adminFunctions\" class=\"panel-body text-dark\" style=\"border-top: 0px solid #bbbbbb;\">";
         echo "<p><strong>MATCH GOOGLE BOOKS</strong></p>";
         echo "<p>To be able to search for mentions of specific publications by choosing a book cover, Linked ";
         echo "Archives uses Google Books to match titles and obtain both author and synopsis details, with the ";
@@ -129,6 +174,9 @@
         echo "style=\"padding-left: 0px; padding-right: 0px;\">";
         echo "</div>";
         echo "</div>";
+        
+///////////////////////////////// Right Column Close        
+        
         echo "</div>";
 
 ///////////////////////////////// Footer        
@@ -143,6 +191,34 @@
 /////////////////////////////////////////////////////////// OnLoad Start
 			
 		$(document).ready(function() {
+            
+///////////////////////////////// Create Collection
+            
+            $("#admin_collection_link").fancybox({
+                type : 'iframe',
+                autoScale : true,
+                transitionIn : 'none',
+                transitionOut : 'none',
+                scrolling : 'yes',
+                fitToView : true,
+                width: '780px', 
+				height: '870px',  
+                autoSize : false
+            });
+            
+///////////////////////////////// Add Items
+            
+            $("#admin_items_link").fancybox({
+                type : 'iframe',
+                autoScale : true,
+                transitionIn : 'none',
+                transitionOut : 'none',
+                scrolling : 'yes',
+                fitToView : true,
+                width: '400px', 
+				height: '870px',  
+                autoSize : false
+            });
             
 ///////////////////////////////// Discover Tags             
             
