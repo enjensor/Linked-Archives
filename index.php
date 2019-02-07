@@ -48,7 +48,8 @@
 //	6-13 August 2018
 //	20 August 2018
 //  29 October 2018
-//  6-13 November 2018
+//  6-14 November 2018
+//	7 February 2019
 //
 //
 /////////////////////////////////////////////////////////// Prevent Direct Access of Included Files
@@ -174,7 +175,7 @@
   	VERSION 0.1
     
   	Development Started: 5 January 2017
-	Last updated: 6 November 2018
+	Last updated: 7 February 2019
 
 
 
@@ -950,7 +951,7 @@
 						<div id="mainnav-menu-wrap">
                         	<div class="nano">
                             	<div class="nano-content">
-                                    <div id="mainnav-shortcut" style="max-height: 410px;">
+                                    <div id="mainnav-shortcut" style="max-height: 500px;">
                                         <ul class="list-unstyled">
                                           	<li class="col-xs-4" data-content="About ARCHIVER">
                                             	<a class="shortcut-grid extLinkB" id="extLinkB" href="./index_about.php"><i class="ion-information-circled" style="font-size: 1.2em;"></i></a></li>    
@@ -1011,6 +1012,8 @@
 													echo "}); ";
 												
 												?>"><i class="ion-help-circled" style="font-size: 1.2em;"></i></a></li>
+												<li class="col-xs-4" data-content="Visit Github Repository">
+                                            	<a class="shortcut-grid" href="https://github.com/enjensor/Linked-Archives" target="_github"><i class="ion-social-github" style="font-size: 1.2em;"></i></a></li>
                                             <?php 
 											
 ///////////////////// If Admin											
