@@ -169,7 +169,9 @@
 				shadowSize: [41, 41]
 			});
 			
-			L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', { attribution: '&copy; 2017 <a href="http://osm.org/copyright">OpenStreetMap</a>' }).addTo(map);
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 			
 			<?php
 

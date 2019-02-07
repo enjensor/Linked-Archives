@@ -26,7 +26,7 @@
 //	JQuery UI | https://jqueryui.com/
 //
 //  VERSION 0.1
-//  11-13 November 2018
+//  11-19 November 2018
 //
 //
 /////////////////////////////////////////////////////////// Hash Function
@@ -380,6 +380,9 @@
                                     while($rowE = mysqli_fetch_row($mysqli_resultE)) { 
                                         $total = $rowE[0];
                                         $empty = "n";
+                                    }
+                                    if(($total < 1)) {
+                                        $empty = "y";
                                     }
                                     if(($empty == "y")) {
                                         echo "<a href=\"";
