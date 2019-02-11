@@ -74,11 +74,21 @@
 	$queryD = "SELECT * FROM collections WHERE dc_identifier = \"$collections_dc_identifier\" ";
 	$mysqli_resultD = mysqli_query($mysqli_link, $queryD);
 	while($rowD = mysqli_fetch_row($mysqli_resultD)) { 
+		$itemz = "n";
 		$org_FormalOrganisation	= $rowD[3];
 		$col_bf_physicalLocation = $rowD[5];
 		$skos_Collection = $rowD[6];	
 		$skos_OrderedCollection = $rowD[7];	
-		$skos_member = $rowD[8];	
+		if(preg_match("/\//i", $skos_OrderedCollection)){
+			$tempSkows = explode("/",$skos_OrderedCollection);
+			$skos_OrderedCollection = $tempSkows[0]." / vol. ".$tempSkows[1];
+			$itemz = "y";
+		}
+		if(($itemz == "y")) {
+			$skos_member = "item. ".$rowD[8];
+		} else {
+			$skos_member = "vol. ".$rowD[8];
+		}	
 		$disco_startDate = $rowD[9];	
 		$disco_endDate = $rowD[10];
 		$collection_found = "y";	
@@ -207,7 +217,7 @@
 		
 		$titleTemp = preg_replace("/\:/i","_","$rowD[6]");
 		echo "\" style=\"color:#000000; text-decoration: none;\">";
-		echo "<strong>Item : $titleTemp</strong>";
+		echo "<strong>Document : $titleTemp</strong>";
 		echo "</a><br />";	
 		if(($show_metadata == "y")) {
 			echo "ID:$rowD[2]<br />";

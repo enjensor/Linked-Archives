@@ -1208,7 +1208,7 @@
 							
 						?>
 					</div>
-					<h4 class="panel-title"><a name="scrollOCR">Text Recognition <?php echo $aPixels; ?></a></h4>
+					<h4 class="panel-title"><a name="scrollOCR">Text Recognition <? #php echo $aPixels; ?></a></h4>
 				</div> 
                 <div id="ocr-panel-collapse" class="collapse in" style="min-height: <?php echo $tPixels; ?>px;">
     				<div class="panel-body" id="ocrContainer">

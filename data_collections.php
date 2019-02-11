@@ -201,7 +201,20 @@
 		if(($rowD[5] != "")) {
 			echo ", $rowD[5]";
 		}
-		echo "<br />MSS $rowD[7]/$rowD[8]<br />";
+		$itemz = "n";
+		if(preg_match("/\//i", $rowD[7])){
+			$tempSkows = explode("/",$rowD[7]);
+			$rowD[7] = $tempSkows[0]." / vol. ".$tempSkows[1];
+			$itemz = "y";
+		}
+		echo "<br />MSS $rowD[7] / ";
+		if(($itemz == "y")) {
+			echo "item. ";
+			echo "$rowD[8]<br />";
+		} else {
+			echo "vol. ";
+			echo "$rowD[8]<br />";
+		}
 		if(($rowD[9] == $rowD[10])){
 			echo "<strong>$rowD[9]</strong>";
 		} else {
